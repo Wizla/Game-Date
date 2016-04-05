@@ -137,7 +137,7 @@ myApp.controller("RegisterCtrl", ["$scope",
   });
       $scope.questionAdd = function(){
         console.log(newData);
-      myFirebaseRef.child(authData.uid).child(newData.User).set({
+      myFirebaseRef.child(authData.uid).child(User).set({
                                                            'Questions' : {
                                                                       "Question1" : {"Muziek" : "yes"}
                                                            }
