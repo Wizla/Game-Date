@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Site - Home</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="css/style_Info.css">
+	<link rel="stylesheet" type="text/css" href="BootstrapHelper/dist/css/bootstrap-formhelpers.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link src='BootstrapSocial/bootstrap-social.css' rel='stylesheet' type='text/css'>
+	
+	<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+<script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
+	
+	<script src="js/app.js"></script>
+
+	<!--Helper for country selection -->
+	<script type="text/javascript" src="BootstrapHelper/js/lang/en_US/bootstrap-formhelpers-countries.en_US.js"></script>
+
+	<script type="text/javascript" src="BootstrapHelper/js/bootstrap-formhelpers-countries.js"></script>
+
+	<!--Helper for Birthday selection -->
+	<script src="BirthdayPicker/dobPicker.min.js"></script>
+
+	
+</head>
+<body>
+
+<div class="container" ng-app="myApp">
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+			<div class="panel panel-information">
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-xs-6">
+							<a href="#" class="active" id="info-form-link">Information</a>
+						</div>
+						<div class="col-xs-6">
+							<a href="#" id="questions-form-link">Questions</a>
+						</div>
+					</div>					
+				</div>
+
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-lg-12">
+
+						<form id="info-form"  method="post" role="form" style="display: block;" ng-controller="ProfileCtrl">
+							<!--MainInformation
+							For linked aan id - placeholder is de tekst in de input - type is nodig
+							 -->
+							<fieldset class="form-group">
+								<label for="inputUsername">Username:</label>
+								<input type="username" class="form-control" id="inputUsername" placeholder="Enter Username" ng-model="username"></input>
+							</fieldset>
+							<fieldset class="form-group">
+								<label for="inputFirstname">Firstname:</label>
+								<input type="firstname" class="form-control" id="inputFirstname" placeholder="Enter Firstname" ng-model="name"></input>
+							</fieldset>
+							<fieldset class="form-group">
+								<label for="inputName">Name:</label>
+								<input type="name" class="form-control" id="inputName" placeholder="Enter Name" ng-model="lastname"></input>
+							</fieldset>
+							<fieldset class="form-group">
+								<label for="inputBirthday">Birthday:</label>
+								<select id="dobday" ng-model="day"></select>
+								<select id="dobmonth" ng-model="month"></select>
+								<select id="dobyear" ng-model="year"></select>
+
+							</fieldset>
+							<fieldset class="form-group">
+								<label for="inputCountry">Country:</label>			
+								<select id="inputCountry" class="form-control input-medium bfh-countries" data-country="US" ng-model="country"></select>
+							</fieldset>
+							<fieldset class="form-group">
+								<label for="inputCity">City:</label>			
+								<input type="city" class="form-control" id="inputCity" placeholder="Enter City" ng-model="city"></input>
+							</fieldset>
+							<fieldset class="form-group">
+								<label for="inputJob">Job:</label>
+								<input type="job" class="form-control" id="inputJob" placeholder="Enter Job" ng-model="job"></input>
+							</fieldset>
+							<fieldset class="form-group">
+					    		<label for="aboutmeText">About Me:</label>
+					    		<textarea class="form-control" id="aboutmeText" rows="3" maxlength="128" ng-model="aboutme"></textarea>
+					  		</fieldset>
+					  		<div class="form-group">
+								<div class="row">
+									<div class="col-sm-6 col-sm-offset-3">
+										<input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-information" value="Confirm" ng-click=addProfile()>
+									</div>
+								</div>
+							</div>
+					  	</form>
+
+					  	<form id="questions-form"  method="post" role="form" style="display: none;" ng-controller="QuestionCtrl">
+							<!--Workout-->
+							<div class="form-group">
+								<label>You like to workout?</label>				
+								<div class="radio">	
+									<label>
+										<input type="radio" name="optionRadios" id="optionRadio1" value="option1">
+											Yes
+										</input>
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" name="optionRadios" id="optionRadio2" value="option1">
+											No
+										</input>
+									</label>
+								</div>			
+							</div>
+
+							<!--Music-->
+							<div class="form-group">
+								<label>Are you into music?</label>
+								<div class="radio">	
+									<label>
+										<input type="radio" name="optionMusic" id="optionMusic1" value="option1">
+											Yes
+										</input>
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" name="optionMusic" id="optionMusic2" value="option1">
+											No
+										</input>
+									</label>
+								</div>			
+							</div>
+
+							<!--Festival-->
+							<div class="form-group">
+								<label>You like to go to festivals?</label>
+								<div class="radio">	
+									<label>
+										<input type="radio" name="optionFestival" id="optionFestival1" value="option1">
+											Yes
+										</input
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" name="optionFestival" id="optionFestival2" value="option1">
+											No
+										</input>
+									</label>
+								</div>			
+							</div>
+
+							<!--Animals-->
+							<div class="form-group">
+								<label>Animals are your best friend?</label>
+								<div class="radio">	
+									<label>
+										<input type="radio" name="optionAnimal" id="optionAnimal1" value="option1">
+											Yes
+										</input>
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" name="optionAnimal" id="optionAnimal2" value="option1">
+											No
+										</input>
+									</label>
+								</div>			
+							</div>
+
+							<!--Adventures-->
+							<div class="form-group">
+								<label>Are you an adventures type?</label>
+								<div class="radio">	
+									<label>
+										<input type="radio" name="optionAdventure" id="optionAdventure1" value="option1">
+											Yes
+										</input>
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" name="optionAdventure" id="optionAdventure2" value="option1">
+											No
+										</input>
+									</label>
+								</div>			
+							</div>
+
+							<!--Experiment/New Things-->
+							<div class="form-group">
+								<label>So you like to try alot of different things?</label>
+								<div class="radio">	
+									<label>
+										<input type="radio" name="optionExperiment" id="optionExperiment1" value="option1">
+											Yes
+										</input>
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" name="optionExperiment" id="optionExperiment2" value="option1">
+											No
+										</input>
+									</label>
+								</div>			
+							</div>
+
+							<!--Cultural/Theatre/Musea-->
+							<div class="form-group">
+								<label>Exploring different cultures are your thing?</label>
+								<div class="radio">	
+									<label>
+										<input type="radio" name="optionCulture" id="optionCulture1" value="option1">
+											Yes
+										</input>
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" name="optionCulture" id="optionCulture2" value="option1">
+											No
+										</input>
+									</label>
+								</div>			
+							</div>
+							<!--Travel-->
+							<div class="form-group">
+								<label>Travelling all around the world is what you like?</label>
+								<div class="radio">	
+									<label>
+										<input type="radio" name="optionTravel" id="optionTravel1" value="option1">
+											Yes
+										</input>
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" name="optionTravel" id="optionTravel2" value="option1">
+											No
+										</input>
+									</label>
+								</div>			
+							</div>
+							<!--Films-->
+							<div class="form-group">
+								<label>You would rather sit at home and watch a film?</label>
+								<div class="radio">	
+									<label>
+										<input type="radio" name="optionFilm" id="optionFilm1" value="option1">
+											Yes
+										</input>
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" name="optionFilm" id="optionFilm2" value="option1">
+											No
+										</input>
+									</label>
+								</div>			
+							</div>
+							<!--Series-->
+							<div class="form-group">
+								<label>Or do you only watch your TV series every week?</label>
+								<div class="radio">	
+									<label>
+										<input type="radio" name="optionSeries" id="optionSeries1" value="option1">
+											Yes
+										</input>
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" name="optionSeries" id="optionSeries2" value="option1">
+											No
+										</input>
+									</label>
+								</div>			
+							</div>
+							<!--Games-->
+							<div class="form-group">
+								<label>Maybe you like to play computer/console games?</label>
+								<div class="radio">	
+									<label>
+										<input type="radio" name="optionGame" id="optionGame1" value="option1">
+											Yes
+										</input>
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" name="optionGame" id="optionGame2" value="option1">
+											No
+										</input>
+									</label>
+								</div>			
+							</div>
+
+							<!--Books-->
+							<div class="form-group">
+								<label>Are books your only love?</label>
+								<div class="radio">	
+									<label>
+										<input type="radio" name="optionBook" id="optionBook1" value="option1">
+											Yes
+										</input>
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" name="optionBook" id="optionBook2" value="option1">
+											No
+										</input>
+									</label>
+								</div>			
+							</div>
+					  		<div class="form-group">
+								<div class="row">
+									<div class="col-sm-6 col-sm-offset-3">
+										<input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-questions" value="Confirm" ng-click="questionAdd()">
+									</div>
+								</div>
+							</div>																		
+						</form>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+	
+	
+</body>
+</html>

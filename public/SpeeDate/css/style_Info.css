@@ -1,0 +1,27 @@
+body {
+    padding-top: 5%;
+    background-color: #5aa5ff /* #029f5b */ !important;
+}
+
+div{
+	font-family: Oswald;
+}
+.panel{
+	border-color: #ccc;
+	-webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+	box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+}
+
+.panel-heading{
+	text-align:center;
+	color: #00415d;
+	background-color: #fff;
+	border-color: #fff;
+	text-align:center;
+	background-image: radial-gradient(#CCC, #FFF), radial-gradient(#CCC, #FFF);
+	background-size:    2px 100%;
+	background-position: 0 0, 100% 0;
+	background-repeat:  no-repeat;
+}
+//http://stackoverflow.com/questions/18211915/css-fading-top-and-bottom-borders

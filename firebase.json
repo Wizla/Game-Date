@@ -1,0 +1,9 @@
+{
+  "firebase": "burning-inferno-6071",
+  "public": "public/SpeeDate",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}
