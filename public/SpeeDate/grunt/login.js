@@ -5,12 +5,13 @@
             var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/");
             auth = $firebaseAuth(myFirebaseRef);
             $scope.login = function(email,password) {
+            	console.log("checkcheck");
                 auth.$authWithPassword({
         email: $scope.email,
         password: $scope.password
       }).then(function(authData) {
                     $scope.authData = authData;
-                    console.log(authData.uid)
+                    console.log(authData)
                     $window.location.href = 'profile/profile.html';
                 }).catch(function(error) {
                    $scope.error = error;

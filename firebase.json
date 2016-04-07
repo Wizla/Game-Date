@@ -1,6 +1,10 @@
 {
   "firebase": "burning-inferno-6071",
+<<<<<<< 55b7997daa95b6c308eca172a750a3b6b2792906
+  "public": "public",
+=======
   "public": "public/SpeeDate",
+>>>>>>> Committing to the cause
   "ignore": [
     "firebase.json",
     "**/.*",
