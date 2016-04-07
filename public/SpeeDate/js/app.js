@@ -90,7 +90,7 @@ myApp.controller("RegisterCtrl", ["$scope",
                   var newData = Complete.val();
                   $scope.newData = newData; 
                   if(newData != null){
-                    $window.location.href = 'test.html';
+                    $window.location.href = 'home.html';
                     console.log("!null");
                   }
                   if(newData == null){
@@ -239,35 +239,47 @@ $scope.radioValue12 = "";
 
 
  //Controller to retrive the data from the database
- myApp.controller("DetailCtrl", ['$scope',"$window",
-  function($scope,$window) {
-  	    //Again we check for Auth data from the user, we use this UID again to get the unqie profile information from the specific user
-        var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");
+ myApp.controller("DetailCtrl", ['$scope',
+  function($scope) {  	   
+       
+        //Again we check for Auth data from the user, we use this UID again to get the unqie profile information from the specific user
+        var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");    
         var authData = myFirebaseRef.getAuth();
-        //We add this to oure firebase ref
-        var ref = new Firebase("https://burning-inferno-6071.firebaseio.com/profile/" + authData.uid); 
+        //We add this to oure firebase ref        
+        var ref = new Firebase("https://burning-inferno-6071.firebaseio.com"); 
         //We use the on methode to listen for data changes at the profile location
-        //the callback passes us the data in the complete and we palce it in a scope object
-        //we will use this scope object to place the data in the view
-      ref.on("value", function(Complete) {
-      var newData = Complete.val();
-      $scope.newData = newData;
-      console.log($scope.newData.Users.User.username)
-      $scope.lol = function(){
-        console.log("lol");
-        $scope.what = newData;
+        //the callback passes us the data in the complete and we palce it in a scope object    
+       //we will use this scope object to place the data in the view
+       console.log(ref);
+       var profileref = ref.child("profile").child(authData.uid);
+       profileref.on("value",function(snapshot) {
+        console.log(snapshot);
+       $scope.newData = snapshot.val();
+       }, function(error) {
+       // The callback failed.
+        console.error(error);
+      });
 
-      }
+      // $scope.newData = Complete.val();
+      // console.log(Complete);
+      // console.log($scope.newData.Users.User.username)
+      // console.log(1 + $scope.count++);
+
+      // Provide a context to override "this" when callbacks are triggered.
+// ref.once('value', function (dataSnapshot) {
+//   // this.x is 1
+//   console.log(dataSnapshot);
+// }, 
+// {x: 1});
+
+      //$scope.what = newData;
+      //console.log($scope.what);
+
       $scope.logout = function(){
         var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");
-        ref.unauth();
+        myFirebaseRef.unauth();
         $window.location.href = 'index.html';
       }
-  });
-    $scope.findMatch = function(){
-      
-    }
-
   }]);
 
  		$(function() {
