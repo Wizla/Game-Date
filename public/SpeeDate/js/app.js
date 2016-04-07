@@ -79,26 +79,54 @@ myApp.controller("RegisterCtrl", ["$scope",
                     }
                 } else {
                   //the window dependency will allow us to go to another html page
-                    $scope.authData = authData;
-                    console.log(authData.uid)
+                  var ref = new Firebase("https://burning-inferno-6071.firebaseio.com/profile/" + authData.uid); 
+                  //We use the on methode to listen for data changes at the profile location
+                  //the callback passes us the data in the complete and we palce it in a scope object
+                  //we will use this scope object to place the data in the view
+                  ref.once("value", function(Complete) {
+                  var newData = Complete.val();
+                  $scope.authData = authData;
+                  console.log(authData.uid);
+                  var newData = Complete.val();
+                  $scope.newData = newData; 
+                  if(newData != null){
+                    $window.location.href = 'test.html';
+                    console.log("!null");
+                  }
+                  if(newData == null){
                     $window.location.href = 'infoPage.html';
+                    console.log("null");
+                  }
+                  });                    
               }
             });
           };
+        $scope.loginF = function(){
+          myFirebaseRef.authWithOAuthPopup("facebook", function(error, authData) {
+            if (error) {
+            alert("Login Failed!"+error);
+            } else {
+                    $scope.authData = authData;
+                    console.log(authData.uid)
+                    $window.location.href = 'infoPage.html';
+            }
+          });
+        }
         }
     ]);
 
+
 //profile conntroler the personal info
- myApp.controller("ProfileCtrl",
-  function($scope) {
+ myApp.controller("ProfileCtrl",["$scope","$window",
+  function($scope,$window) {
     //here we reference to the profile in the root tree
-  var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");
+   var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");
           //we check if oure user is authenticated with the client
-          var authData = myFirebaseRef.getAuth();
-        //Here we use the UID and set is as a child in the data tree, so it's unique for all users.
+   var authData = myFirebaseRef.getAuth();
+  //Here we use the UID and set is as a child in the data tree, so it's unique for all users.
   $scope.addProfile = function(){   
   myFirebaseRef.child(authData.uid).set({
-                                         'User' : {  
+                                         'Users' : { "User" : {
                                                     "Name" :  {
                                                       'First' : $scope.name, 
                                                       'Lastname' : $scope.lastname                                                
@@ -115,41 +143,104 @@ myApp.controller("RegisterCtrl", ["$scope",
                                                     },
                                                     'Job' : {"Job" : $scope.job},
                                                     'AboutMe' : {"AboutMe" : $scope.aboutme},                                                                                           
-                                                    }                                                 
+                                                    } 
+                                                    }                                                
                                               })
-  console.log("lol");
   }
+
+$scope.questionAdd = function(){
+//   setValue = 0;
+//   if(document.getElementById('optionRadio1').checked) {
+//     setValue += 8.34;
+//     console.log("oke?");
+// }
+
+//  $('.progress-bar').each(function() {
+//     var $bar = $(this);
+//     var progress = setInterval(function() {
+      
+//       var currWidth = parseInt($bar.attr('aria-valuenow'));
+//       var maxWidth = parseInt($bar.attr('aria-valuemax'));
+//     //update the progress
+//         $bar.width(currWidth+'%');
+//         $bar.attr('aria-valuenow',currWidth+setValue);
+//          console.log(currWidth + setValue);
+//       //clear timer when max is reach
+//       if (currWidth < (maxWidth) ){
+//         clearInterval(progress);
+//       }
+//       else if(currWidth >= 100)
+//         clearInterval(progress);         
+//     }, 500);
   
- });
+// });
+  console.log($scope.radioValue1);
+  console.log($scope.radioValue2);
+  console.log($scope.radioValue3);
+  console.log($scope.radioValue4);
+  console.log($scope.radioValue5);
+  console.log($scope.radioValue6);
+  console.log($scope.radioValue7);
+  console.log($scope.radioValue8);
+  console.log($scope.radioValue9);
+  console.log($scope.radioValue10);
+  console.log($scope.radioValue11);
+  console.log($scope.radioValue12);
+  myFirebaseRef.child(authData.uid).child('Questions').set({
+                                         'Questions' : {
+                                                        "Question1" : {"Workout" : $scope.radioValue1},
+                                                        "Question2" : {"Music" : $scope.radioValue2},
+                                                        "Question3" : {"Festival" : $scope.radioValue3},
+                                                        "Question4" : {"Animals" : $scope.radioValue4},
+                                                        "Question5" : {"Adventures" : $scope.radioValue5},
+                                                        "Question6" : {"Experiment" : $scope.radioValue6},
+                                                        "Question7" : {"Cultural" : $scope.radioValue7},
+                                                        "Question8" : {"Travel" : $scope.radioValue8},
+                                                        "Question9" : {"Films" : $scope.radioValue9},
+                                                        "Question10" : {"Series" : $scope.radioValue10},
+                                                        "Question11" : {"Games" : $scope.radioValue11},
+                                                        "Question12" : {"Books" : $scope.radioValue12}                                                                                                                          }
+  })
+}
+$scope.radioValue1 = "";
+$scope.radioValue2 = "";
+$scope.radioValue3 = "";
+$scope.radioValue4 = "";
+$scope.radioValue5 = "";
+$scope.radioValue6 = "";
+$scope.radioValue7 = "";
+$scope.radioValue8 = "";
+$scope.radioValue9 = "";
+$scope.radioValue10 = "";
+$scope.radioValue11 = "";
+$scope.radioValue12 = "";
 
- myApp.controller("QuestionCtrl",
-  function($scope){
-     var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");
+  
+ }]);
+
+ //myApp.controller("QuestionCtrl",
+  //function($scope){
+    // var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");
           //we check if oure user is authenticated with the client
-          var authData = myFirebaseRef.getAuth();
-          console.log(authData);
+       //   var authData = myFirebaseRef.getAuth();
+       //   console.log(authData);
         //Here we use the UID and set is as a child in the data tree, so it's unique for all users.
-            var ref = new Firebase("https://burning-inferno-6071.firebaseio.com/profile/" + authData.uid);
-        ref.on("value", function(Complete) {
-      var newData = Complete.val();
-      $scope.newData = newData;
-      console.log(newData);
-  });
-      $scope.questionAdd = function(){
-        console.log(newData);
-      myFirebaseRef.child(authData.uid).child(User).set({
-                                                           'Questions' : {
-                                                                      "Question1" : {"Muziek" : "yes"}
-                                                           }
-        })
-      }
+    //  var ref = new Firebase("https://burning-inferno-6071.firebaseio.com/profile/" + authData.uid + "/User"); 
+        //We use the on methode to listen for data changes at the profile location
+        //the callback passes us the data in the complete and we palce it in a scope object
+        //we will use this scope object to place the data in the view
+     // ref.on("value", function(Complete) {
+     // var newData = Complete.val();
+     // $scope.newData = newData;
+     // console.log(newData.User);
+  //});
 
-  });
+  //});
 
 
  //Controller to retrive the data from the database
- myApp.controller("DetailCtrl", ['$scope',
-  function($scope) {
+ myApp.controller("DetailCtrl", ['$scope',"$window",
+  function($scope,$window) {
   	    //Again we check for Auth data from the user, we use this UID again to get the unqie profile information from the specific user
         var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");
         var authData = myFirebaseRef.getAuth();
@@ -161,9 +252,19 @@ myApp.controller("RegisterCtrl", ["$scope",
       ref.on("value", function(Complete) {
       var newData = Complete.val();
       $scope.newData = newData;
+      console.log($scope.newData.Users.User.username)
+      $scope.lol = function(){
+        console.log("lol");
+        $scope.what = newData;
+
+      }
+      $scope.logout = function(){
+        var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");
+        ref.unauth();
+        $window.location.href = 'index.html';
+      }
   });
   }]);
-
 
  		$(function() {
 
@@ -219,5 +320,6 @@ $(document).ready(function(){
     maximumAge: 80
   });
 });
+
 
 

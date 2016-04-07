@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html ng-app="myApp" ng-controller="DetailCtrl">
+<head>
+	<title></title>
+		<!-- Latest compiled and minified JavaScript -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+        <script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
+        <script src="js/app.js"></script>
+</head>
+<body>
+<button ng-click="lol()">WTF</button>
+<button ng-click="logout()">LOGOUT</button>
+<button ng-click="findMatch()">Find Match</button>
+ <h1 ng-model="newData">Profilepage from : {{what.Users.User.username.Username}}</h1>
+ <p>{{what.Users.User.Name.First}}</p>
+ <p>{{what.Users.User.Name.Lastname}}</p>
+   <p>{{what.Users.User.Age.day}}/{{what.Users.User.Age.month}}/{{what.Users.User.Age.year}}</p>
+    <p>{{what.Users.User.Place.City}}</p>
+     <p>{{what.Users.User.Place.Country}}</p>
+      <p>{{what.Users.User.Job.Job}}</p>
+       <p>{{what.Users.User.AboutMe.AboutMe}}</p>
+        <p>{{what.Users.User}}</p>         
+</body>
+</html>

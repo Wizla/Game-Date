@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="myApp">
 <head>
 	<title>My Site - Home</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -8,12 +8,20 @@
 	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
 	<link src='BootstrapSocial/bootstrap-social.css' rel='stylesheet' type='text/css'>
 	
-	<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>	
+	<script   src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>	
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
 	<!-- Optional theme -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 	<!-- Latest compiled and minified JavaScript -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
@@ -33,10 +41,46 @@
 	
 </head>
 <body>
-
-<div class="container" ng-app="myApp">
-	<div class="row">
-		<div class="col-md-6 col-md-offset-3">
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">WebSiteName</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Page 1 <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Page 1-1</a></li>
+            <li><a href="#">Page 1-2</a></li>
+            <li><a href="#">Page 1-3</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Page 2</a></li>
+        <li><a href="#">Page 3</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container" ng-controller="ProfileCtrl">
+<!--   Skills Progress Bar
+<div class="progress">
+  <div class="progress-bar progress-bar-striped active" role="progressbar"
+  aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+    Progress Bar
+  </div>
+</div> -->
+</div>
+	<div class="row" ng-hide="myValue">
+		<div class="col-md-6 col-md-offset-3" ng-show="!myValue">
 			<div class="panel panel-information">
 				<div class="panel-heading">
 					<div class="row">
@@ -53,7 +97,7 @@
 					<div class="row">
 						<div class="col-lg-12">
 
-						<form id="info-form"  method="post" role="form" style="display: block;" ng-controller="ProfileCtrl">
+						<form id="info-form"  method="post" role="form" style="display: block;">
 							<!--MainInformation
 							For linked aan id - placeholder is de tekst in de input - type is nodig
 							 -->
@@ -101,20 +145,20 @@
 							</div>
 					  	</form>
 
-					  	<form id="questions-form"  method="post" role="form" style="display: none;" ng-controller="QuestionCtrl">
+					  	<form id="questions-form"  method="post" role="form" style="display: none;" ng-controller="ProfileCtrl" ng-submut="questionAdd()">
 							<!--Workout-->
 							<div class="form-group">
 								<label>You like to workout?</label>				
 								<div class="radio">	
 									<label>
-										<input type="radio" name="optionRadios" id="optionRadio1" value="option1">
+										<input type="radio" name="optionRadios" id="optionRadio1" ng-model="radioValue1" value="Yes">
 											Yes
 										</input>
 									</label>
 								</div>
 								<div class="radio">
 									<label>
-										<input type="radio" name="optionRadios" id="optionRadio2" value="option1">
+										<input type="radio" name="optionRadios" id="optionRadio2" value="No" ng-model="radioValue1">
 											No
 										</input>
 									</label>
@@ -126,14 +170,14 @@
 								<label>Are you into music?</label>
 								<div class="radio">	
 									<label>
-										<input type="radio" name="optionMusic" id="optionMusic1" value="option1">
+										<input type="radio" name="optionMusic" id="optionMusic1" value="Yes" ng-model="radioValue2">
 											Yes
 										</input>
 									</label>
 								</div>
 								<div class="radio">
 									<label>
-										<input type="radio" name="optionMusic" id="optionMusic2" value="option1">
+										<input type="radio" name="optionMusic" id="optionMusic2" value="No" ng-model="radioValue2">
 											No
 										</input>
 									</label>
@@ -143,16 +187,16 @@
 							<!--Festival-->
 							<div class="form-group">
 								<label>You like to go to festivals?</label>
-								<div class="radio">	
+								<div class="radio" ng-model="radioValue">	
 									<label>
-										<input type="radio" name="optionFestival" id="optionFestival1" value="option1">
+										<input type="radio" name="optionFestival" id="optionFestival1" value="Yes" ng-model="radioValue3">
 											Yes
 										</input
 									</label>
 								</div>
 								<div class="radio">
 									<label>
-										<input type="radio" name="optionFestival" id="optionFestival2" value="option1">
+										<input type="radio" name="optionFestival" id="optionFestival2" value="No" ng-model="radioValue3">
 											No
 										</input>
 									</label>
@@ -164,14 +208,14 @@
 								<label>Animals are your best friend?</label>
 								<div class="radio">	
 									<label>
-										<input type="radio" name="optionAnimal" id="optionAnimal1" value="option1">
+										<input type="radio" name="optionAnimal" id="optionAnimal1" value="Yes" ng-model="radioValue4">
 											Yes
 										</input>
 									</label>
 								</div>
 								<div class="radio">
 									<label>
-										<input type="radio" name="optionAnimal" id="optionAnimal2" value="option1">
+										<input type="radio" name="optionAnimal" id="optionAnimal2" value="No" ng-model="radioValue4">
 											No
 										</input>
 									</label>
@@ -183,14 +227,14 @@
 								<label>Are you an adventures type?</label>
 								<div class="radio">	
 									<label>
-										<input type="radio" name="optionAdventure" id="optionAdventure1" value="option1">
+										<input type="radio" name="optionAdventure" id="optionAdventure1" value="Yes" ng-model="radioValue5">
 											Yes
 										</input>
 									</label>
 								</div>
 								<div class="radio">
 									<label>
-										<input type="radio" name="optionAdventure" id="optionAdventure2" value="option1">
+										<input type="radio" name="optionAdventure" id="optionAdventure2" value="No" ng-model="radioValue5">
 											No
 										</input>
 									</label>
@@ -202,14 +246,14 @@
 								<label>So you like to try alot of different things?</label>
 								<div class="radio">	
 									<label>
-										<input type="radio" name="optionExperiment" id="optionExperiment1" value="option1">
+										<input type="radio" name="optionExperiment" id="optionExperiment1" value="Yes" ng-model="radioValue6">
 											Yes
 										</input>
 									</label>
 								</div>
 								<div class="radio">
 									<label>
-										<input type="radio" name="optionExperiment" id="optionExperiment2" value="option1">
+										<input type="radio" name="optionExperiment" id="optionExperiment2" value="No" ng-model="radioValue6">
 											No
 										</input>
 									</label>
@@ -221,14 +265,14 @@
 								<label>Exploring different cultures are your thing?</label>
 								<div class="radio">	
 									<label>
-										<input type="radio" name="optionCulture" id="optionCulture1" value="option1">
+										<input type="radio" name="optionCulture" id="optionCulture1" value="Yes" ng-model="radioValue7">
 											Yes
 										</input>
 									</label>
 								</div>
 								<div class="radio">
 									<label>
-										<input type="radio" name="optionCulture" id="optionCulture2" value="option1">
+										<input type="radio" name="optionCulture" id="optionCulture2" value="No" ng-model="radioValue7">
 											No
 										</input>
 									</label>
@@ -239,14 +283,14 @@
 								<label>Travelling all around the world is what you like?</label>
 								<div class="radio">	
 									<label>
-										<input type="radio" name="optionTravel" id="optionTravel1" value="option1">
+										<input type="radio" name="optionTravel" id="optionTravel1" value="Yes" ng-model="radioValue8">
 											Yes
 										</input>
 									</label>
 								</div>
 								<div class="radio">
 									<label>
-										<input type="radio" name="optionTravel" id="optionTravel2" value="option1">
+										<input type="radio" name="optionTravel" id="optionTravel2" value="No" ng-model="radioValue8">
 											No
 										</input>
 									</label>
@@ -257,14 +301,14 @@
 								<label>You would rather sit at home and watch a film?</label>
 								<div class="radio">	
 									<label>
-										<input type="radio" name="optionFilm" id="optionFilm1" value="option1">
+										<input type="radio" name="optionFilm" id="optionFilm1" value="Yes" ng-model="radioValue9">
 											Yes
 										</input>
 									</label>
 								</div>
 								<div class="radio">
 									<label>
-										<input type="radio" name="optionFilm" id="optionFilm2" value="option1">
+										<input type="radio" name="optionFilm" id="optionFilm2" value="No" ng-model="radioValue9">
 											No
 										</input>
 									</label>
@@ -275,14 +319,14 @@
 								<label>Or do you only watch your TV series every week?</label>
 								<div class="radio">	
 									<label>
-										<input type="radio" name="optionSeries" id="optionSeries1" value="option1">
+										<input type="radio" name="optionSeries" id="optionSeries1" value="Yes" ng-model="radioValue10">
 											Yes
 										</input>
 									</label>
 								</div>
 								<div class="radio">
 									<label>
-										<input type="radio" name="optionSeries" id="optionSeries2" value="option1">
+										<input type="radio" name="optionSeries" id="optionSeries2" value="No" ng-model="radioValue10">
 											No
 										</input>
 									</label>
@@ -293,14 +337,14 @@
 								<label>Maybe you like to play computer/console games?</label>
 								<div class="radio">	
 									<label>
-										<input type="radio" name="optionGame" id="optionGame1" value="option1">
+										<input type="radio" name="optionGame" id="optionGame1" value="Yes" ng-model="radioValue11">
 											Yes
 										</input>
 									</label>
 								</div>
 								<div class="radio">
 									<label>
-										<input type="radio" name="optionGame" id="optionGame2" value="option1">
+										<input type="radio" name="optionGame" id="optionGame2" value="No" ng-model="radioValue11">
 											No
 										</input>
 									</label>
@@ -312,14 +356,14 @@
 								<label>Are books your only love?</label>
 								<div class="radio">	
 									<label>
-										<input type="radio" name="optionBook" id="optionBook1" value="option1">
+										<input type="radio" name="optionBook" id="optionBook1" value="Yes" ng-model="radioValue12">
 											Yes
 										</input>
 									</label>
 								</div>
 								<div class="radio">
 									<label>
-										<input type="radio" name="optionBook" id="optionBook2" value="option1">
+										<input type="radio" name="optionBook" id="optionBook2" value="No" ng-model="radioValue12">
 											No
 										</input>
 									</label>
