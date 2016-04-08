@@ -1,6 +1,6 @@
 
 //Module for weppAPP 
-var myApp = angular.module('myApp', ["firebase"]);
+var myApp = angular.module('myApp', ["firebase","ngQueue"]);
 
 //myApp.factory("Auth", ["$firebaseAuth",
 	//function($firebaseAuth) {
@@ -215,6 +215,7 @@ $scope.radioValue10 = "";
 $scope.radioValue11 = "";
 $scope.radioValue12 = "";
 
+    
   
  }]);
 
@@ -239,9 +240,8 @@ $scope.radioValue12 = "";
 
 
  //Controller to retrive the data from the database
- myApp.controller("DetailCtrl", ['$scope',
-  function($scope) {  	   
-       
+ myApp.controller("DetailCtrl", ['$scope','$queue',
+  function($scope,$queue) {  	   
         //Again we check for Auth data from the user, we use this UID again to get the unqie profile information from the specific user
         var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");    
         var authData = myFirebaseRef.getAuth();
@@ -250,16 +250,88 @@ $scope.radioValue12 = "";
         //We use the on methode to listen for data changes at the profile location
         //the callback passes us the data in the complete and we palce it in a scope object    
        //we will use this scope object to place the data in the view
+       var profilescore = 0;
+       // create a new queue calkback
+                var myCallback = function(item) {
+                console.log(item);
+            },
+            options = {
+                delay: 2000, //delay 2 seconds between processing items
+                paused: true, //start out paused
+                complete: function() { console.log('complete!'); }
+            };
+       
        console.log(ref);
        var profileref = ref.child("profile").child(authData.uid);
        profileref.on("value",function(snapshot) {
         console.log(snapshot);
        $scope.newData = snapshot.val();
+       $scope.$apply();
+       //Queue testing
+       //Work in progress lol
+       console.log($scope.newData.Questions.Questions.Question1.Workout);
+       if($scope.newData.Questions.Questions.Question1.Workout == "Yes"){
+        profilescore += 1;
+        console.log(profilescore);
+       }
+       if($scope.newData.Questions.Questions.Question2.Music == "Yes"){
+        profilescore += 1;
+        console.log(profilescore);
+       }
+        if($scope.newData.Questions.Questions.Question3.Festival == "Yes"){
+        profilescore += 1;
+        console.log(profilescore);
+       }
+        if($scope.newData.Questions.Questions.Question4.Animals == "Yes"){
+        profilescore += 1;
+        console.log(profilescore);
+       }
+        if($scope.newData.Questions.Questions.Question5.Adventures == "Yes"){
+        profilescore += 1;
+        console.log(profilescore);
+       }
+        if($scope.newData.Questions.Questions.Question6.Experiment == "Yes"){
+        profilescore += 1;
+        console.log(profilescore);
+       }
+        if($scope.newData.Questions.Questions.Question7.Cultural == "Yes"){
+        profilescore += 1;
+        console.log(profilescore);
+       }
+        if($scope.newData.Questions.Questions.Question8.Travel == "Yes"){
+        profilescore += 1;
+        console.log(profilescore);
+       }
+        if($scope.newData.Questions.Questions.Question9.Films == "Yes"){
+        profilescore += 1;
+        console.log(profilescore);
+       }
+         if($scope.newData.Questions.Questions.Question10.Series == "Yes"){
+        profilescore += 1;
+        console.log(profilescore);
+       }
+        if($scope.newData.Questions.Questions.Question11.Games == "Yes"){
+        profilescore += 1;
+        console.log(profilescore);
+       }
+        if($scope.newData.Questions.Questions.Question12.Books == "Yes"){
+        profilescore += 1;
+        console.log(profilescore);
+       }    
+       if (profilescore == 12) {
+        // create an instance of a queue
+        // note that the first argument - a callback to be used on each item - is required
+        var myQueue = $queue.queue(myCallback, options);
+        //possisble to queue a users uid
+        myQueue.add(authData.uid); //add one item
+        //myQueue.addEach(['item 2', 'item 3']); //add multiple items
+
+        myQueue.start(); //must call start() if queue starts paused
+       }
        }, function(error) {
        // The callback failed.
         console.error(error);
       });
-
       // $scope.newData = Complete.val();
       // console.log(Complete);
       // console.log($scope.newData.Users.User.username)
@@ -281,6 +353,28 @@ $scope.radioValue12 = "";
         $window.location.href = 'index.html';
       }
   }]);
+
+ myApp.controller("MatchCtrl", ["$scope", function($scope){
+  //Again we check for Auth data from the user, we use this UID again to get the unqie profile information from the specific user
+        var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");    
+        var authData = myFirebaseRef.getAuth();
+        //We add this to oure firebase ref        
+        var ref = new Firebase("https://burning-inferno-6071.firebaseio.com"); 
+        //We use the on methode to listen for data changes at the profile location
+        //the callback passes us the data in the complete and we palce it in a scope object    
+       //we will use this scope object to place the data in the view
+       console.log(ref);
+       var profileref = ref.child("profile").child(authData.uid);
+       profileref.on("value",function(snapshot) {
+       console.log(snapshot);
+       $scope.newData = snapshot.val();
+       $scope.$apply();
+       }, function(error) {
+       // The callback failed.
+        console.error(error);
+      });
+
+ }]);
 
  		$(function() {
 

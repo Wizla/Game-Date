@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html ng-app="myApp">
 <head>
-	<title></title>
-	<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<title>Matching</title>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
 <!-- Latest compiled JavaScript -->
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-		<!-- Latest compiled and minified JavaScript -->
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-        <script type="text/javascript" src="js/angular-queue.js"></script>
-        <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
-        <script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+<script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
 </head>
-<body ng-controller="DetailCtrl">
+<body>
 <nav class="navbar navbar-default">
-  <div class="container-fluid">
+  <div class="container-fluid" ng-controller="DetailCtrl">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
         <span class="icon-bar"></span>
@@ -35,7 +33,7 @@
                 <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{newData.Users.User.username.Username}}<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Profile</a></li>
+            <li><a href="test.html">Profile</a></li>
             <li><a href="#">Settings</a></li>
             <li><a href="#" ng-click="logout()">Logout</a></li>
           </ul>
@@ -46,15 +44,6 @@
     </div>
   </div>
 </nav>
-<h1>Profilepage from : {{newData.Users.User.username.Username}}</h1>
-<p>{{newData.Users.User.Name.Lastname}}</p>
-<p>{{newData.Users.User.Name.Lastname}}</p>
-   <p>{{newData.Users.User.Age.day}} {{what.Users.User.Age.month}} {{newData.Users.User.Age.year}}</p>
-    <p>{{newData.Users.User.Place.City}}</pµ>
-     <p>{{newData.Users.User.Place.Country}}</p>
-      <p>{{newData.Users.User.Job.Job}}</p>
-       <p>{{newData.Users.User.AboutMe.AboutMe}}</p> 
-</div>
-  <footer><script src="js/app.js"></script></footer>
+<h1>Match</h1>
 </body>
 </html>
