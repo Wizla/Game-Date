@@ -252,7 +252,7 @@ $scope.radioValue12 = "";
        //we will use this scope object to place the data in the view
        var profilescore = 0;
        // create a new queue calkback
-                var myCallback = function(item) {
+                /*var myCallback = function(item) {
                 $scope.items = item
                 //console.log(item);
                 //console.log(items);
@@ -262,8 +262,24 @@ $scope.radioValue12 = "";
                 delay: 2000, //delay 2 seconds between processing items
                 paused: true, //start out paused
                 complete: function() { console.log('complete!'); }
-            };
-       
+            };*/
+        function roomChatSetup(authData) {
+        var chat = new Firechat(ref);
+        chat.setUser(authData.uid, $scope.newData.Users.User.username.Username, function(user) {
+          console.log("Creating chatroom...");
+          chat.createRoom("New Chatroom Name", "private", function(roomId) {
+            console.log("Created room "+roomId);
+          });
+       //$("#firechat").html("<div class='alert alert-success'>Your chatroom has been set up. Refresh to view</div>");
+       });
+     }
+
+        function initChat(authData) {
+        var chatUI = new FirechatUI(ref, document.getElementById('firechat'));
+        chatUI.setUser(authData.uid, $scope.newData.Users.User.username.Username);
+    }
+
+
        console.log(ref);
        var profileref = ref.child("profile").child(authData.uid);
        profileref.on("value",function(snapshot) {
@@ -325,7 +341,7 @@ $scope.radioValue12 = "";
        if (profilescore == 12) {
         // create an instance of a queue
         // note that the first argument - a callback to be used on each item - is required
-        var myQueue = $queue.queue(myCallback, options);
+/*        var myQueue = $queue.queue(myCallback, options);
         //possisble to queue a users uid
         myQueue.add(authData.uid);
         var size = myQueue.size();
@@ -340,10 +356,12 @@ $scope.radioValue12 = "";
             console.log("it works ?");
           }
            //must call start() if queue starts paused
-        }
+        }*/
         //myQueue.addEach(['item 2', 'item 3']); //add multiple items
 
         //myQueue.start(); //must call start() if queue starts paused
+    roomChatSetup(authData);
+    initChat(authData);
        }
        }, function(error) {
        // The callback failed.
