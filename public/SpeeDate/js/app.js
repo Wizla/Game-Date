@@ -253,7 +253,10 @@ $scope.radioValue12 = "";
        var profilescore = 0;
        // create a new queue calkback
                 var myCallback = function(item) {
-                console.log(item);
+                $scope.items = item
+                //console.log(item);
+                //console.log(items);
+
             },
             options = {
                 delay: 2000, //delay 2 seconds between processing items
@@ -266,6 +269,7 @@ $scope.radioValue12 = "";
        profileref.on("value",function(snapshot) {
         console.log(snapshot);
        $scope.newData = snapshot.val();
+       console.log($scope.newData);
        $scope.$apply();
        //Queue testing
        //Work in progress lol
@@ -323,15 +327,32 @@ $scope.radioValue12 = "";
         // note that the first argument - a callback to be used on each item - is required
         var myQueue = $queue.queue(myCallback, options);
         //possisble to queue a users uid
-        myQueue.add(authData.uid); //add one item
+        myQueue.add(authData.uid);
+        var size = myQueue.size();
+        console.log(size); //add one item
+        if (myQueue.size() >= 1) {
+          myQueue.start();
+          console.log("oke?");
+          console.log($scope.items);
+          if ($scope.items == authData.uid) {
+            console.log($scope.newData);          
+            ref.child('Chat').child("room" + profilescore).child("Users").child(authData.uid).child('Username').set({"Username" : { "Username" : $scope.newData.Users.User.username.Username}});
+            console.log("it works ?");
+          }
+           //must call start() if queue starts paused
+        }
         //myQueue.addEach(['item 2', 'item 3']); //add multiple items
 
-        myQueue.start(); //must call start() if queue starts paused
+        //myQueue.start(); //must call start() if queue starts paused
        }
        }, function(error) {
        // The callback failed.
         console.error(error);
       });
+
+       $scope.sendmessage = function(){
+        ref.child('Chat').child("room" + profilescore).child("Users").child(authData.uid).child("Chat").push({"Message" : {"Message" : $scope.text}});
+       }
       // $scope.newData = Complete.val();
       // console.log(Complete);
       // console.log($scope.newData.Users.User.username)
