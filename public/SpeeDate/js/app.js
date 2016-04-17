@@ -19,6 +19,7 @@ myApp.controller("RegisterCtrl", ["$scope",
       //Firebase REF, Account will be created and stored in the database
       //Database is @ Login & Auth! Won't be abel to see password, only email and ID! Secure.
       var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/");
+      var authData = myFirebaseRef.getAuth();
       if ($scope.password == $scope.cpassword) {      
       //Firebase SDK methode for creation users, 2 scope objects --> binding with the register.html model.
       myFirebaseRef.createUser({
@@ -252,11 +253,11 @@ $scope.radioValue12 = "";
 
 
  //Controller to retrive the data from the database
- myApp.controller("DetailCtrl", ['$scope','$queue',
-  function($scope,$queue) {  	   
+ myApp.controller("DetailCtrl", ['$scope','$queue',"$window",
+  function($scope,$queue,$window) {  	   
         //Again we check for Auth data from the user, we use this UID again to get the unqie profile information from the specific user
         var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");    
-        
+        var authData = myFirebaseRef.getAuth();
 
         //We add this to oure firebase ref        
         var ref = new Firebase("https://burning-inferno-6071.firebaseio.com"); 
@@ -283,7 +284,7 @@ $scope.radioValue12 = "";
           chat.createRoom("New Chatroom Name", "private", function(roomId) {
             console.log("Created room "+roomId);
           });
-       //$("#firechat").html("<div class='alert alert-success'>Your chatroom has been set up. Refresh to view</div>");
+       
        });
      }
 
@@ -356,7 +357,7 @@ $scope.radioValue12 = "";
       }
   }]);
 
-  myApp.controller("MatchCtrl", function($scope){
+  myApp.controller("MatchCtrl", function($scope,$window){
     var profilescore = 0;
     var MyFirebase = new Firebase("https://burning-inferno-6071.firebaseio.com/");
     var authData = MyFirebase.getAuth();
@@ -395,6 +396,12 @@ $scope.radioValue12 = "";
         })
       })
     }
+
+        $scope.logout = function(){
+        var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");
+        myFirebaseRef.unauth();
+        $window.location.href = 'index.html';
+      }
 
 
 
