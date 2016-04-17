@@ -17,6 +17,7 @@
         <script type="text/javascript" src="js/angular-queue.js"></script>
         <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
         <script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
+        <script src="js/app_btn.js"></script>
 </head>
 
 <body ng-controller="DetailCtrl">
@@ -74,7 +75,34 @@
               <label>Job: </label>
               <p>{{newData.Users.User.Job.Job}}</p>
               <label>About Me: </label>
-              <p>{{newData.Users.User.AboutMe.AboutMe}}</p> 
+              <p>{{newData.Users.User.AboutMe.AboutMe}}</p>
+
+              <h2>Questions </h2></br>
+
+              <label>You like to Workout: </label>
+              <p>{{newData.Questions.Questions.Question1.Workout}}</p>
+              <label>Are you into music?: </label>
+              <p>{{newData.Questions.Questions.Question2.Music}}</p>
+              <label>You like to go to festivals: </label>
+              <p>{{newData.Questions.Questions.Question3.Festival}}</p>
+              <label>Animals are your best friend?: </label>
+              <p>{{newData.Questions.Questions.Question4.Animals}}</p>
+              <label>Are you an adventurous type?: </label>
+              <p>{{newData.Questions.Questions.Question5.Adventures}}</p>
+              <label>You like trying alot of different things?: </label>
+              <p>{{newData.Questions.Questions.Question6.Experiment}}</p>
+              <label>Exploring different cultures are your thing?: </label>
+              <p>{{newData.Questions.Questions.Question7.Cultural}}</p>
+              <label>Travelling all around the world is what you like?: </label>
+              <p>{{newData.Questions.Questions.Question8.Travel}}</p>
+              <label>You would rather sit at home and watch a film?: </label>
+              <p>{{newData.Questions.Questions.Question9.Films}}</p>
+              <label>You only watch your weekly TV-series?: </label>
+              <p>{{newData.Questions.Questions.Question10.Series}}</p>
+              <label>You like to spend time behind the computer?: </label>
+              <p>{{newData.Questions.Questions.Question11.Games}}</p>
+              <label>Are books your only love?: </label>
+              <p>{{newData.Questions.Questions.Question12.Books}}</p>
             </div>
           </div>
         </div>
