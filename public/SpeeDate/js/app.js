@@ -51,6 +51,8 @@ myApp.controller("RegisterCtrl", ["$scope",
 ]);
 
 
+
+
     //login controller
     //Dependency injection //Window might be changed later on with UI router.. 
     myApp.controller("LoginCtrl", ["$scope","$window",
@@ -563,6 +565,16 @@ $scope.radioValue12 = "";
      });
     }
   });
+myApp.controller("StripeCtrl", function($scope){
+  // Stripe Response Handler
+$scope.stripeCallback = function (code, result) {
+    if (result.error) {
+        window.alert('it failed! error: ' + result.error.message);
+    } else {
+        window.alert('success! token: ' + result.id);
+    }
+};
+  })
 
  		$(function() {
 
@@ -618,6 +630,7 @@ $(document).ready(function(){
     maximumAge: 80
   });
 });
+
 
 
      //  for (var key in $scope.newData.Questions.Questions) {
