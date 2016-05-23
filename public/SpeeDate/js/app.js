@@ -320,6 +320,7 @@ $scope.radioValue12 = "";
           //Looking for female 
           if ($scope.newData.Users.User.LookingFor.LookingFor == "Female") {
             //Retrieving last member added to lookingfor male section
+            console.log("Male");
             Matchref.child("Male").limitToLast(1).on("value", function(snapdata){
               snapdata.forEach(function(uid){
                 $scope.uid = uid.val();
@@ -339,54 +340,46 @@ $scope.radioValue12 = "";
                       //Save the Messages per username
                       RoomRef.child($scope.newData.Users.User.username.Username).child("Messages").push({"Messages": $scope.Messages});
                     
-                   }
+                   }                
                     //Retrieving messages from the database
-                    RoomRef.child("Messages").limitToLast(1).on('value', function(chatMessage){
-                    $scope.chatMessage = chatMessage.val();
-                    chatMessage.forEach(function(Message){
+                    //Reference to chatroom
+                    //checking for new data
+                    RoomRef.child($scope.newData.Users.User.username.Username).child("Messages").limitToLast(1).on("value", function(Chatroom){
+                      $scope.Chatroom = Chatroom.val();
+                      console.log($scope.Chatroom);
+                      Chatroom.forEach(function(Message){
                        $scope.Message = Message.val();
-                       console.log($scope.Message);
-                       //Message to view
+                       console.log("Message send :" + $scope.Messages);
                        var newLine = document.createElement('p');
                        newLine.textContent = $scope.newData.Users.User.username.Username + ": " + $scope.Message.Messages;
-                       document.getElementById("chatdiv").appendChild(newLine);
+                       document.getElementById("chatdiv").appendChild(newLine);  
+                      });
                     });
-                   });             
                 });
               });
             });
           }
           else
-            //Do something whenere are are no males in the lookingfor section
+            //Do something whenever there are are no males in the lookingfor section
           if ($scope.newData.Users.User.LookingFor.LookingFor == "Male") {
-            Matchref.child('Male').child(authData.uid).set({"Info" : {"Username" : $scope.newData.Users.User.username.Username,
-                                                                                          "Sex" : $scope.newData.Users.User.Sex.Sex,
-                                                                                          "UserID" : authData.uid}})
-              Matchref.child("Female").limitToLast(1).on("value", function(snapdata){
-                snapdata.forEach(function(uid){
-                  $scope.uid = uid.val();
-                  console.log($scope.uid.Info.UserID);
-                  firebaseRef.child("Chatroom").on("value", function(ChatID){
-                    //$scope.ChatID = ChatID.key();
-                    //console.log($scope.ChatID);
-                    ChatID.forEach(function(ChatIDD){
-                      $scope.ChatIDD = ChatIDD.key();
-                      console.log($scope.ChatIDD);
-                      firebaseRef.child("Chatroom").child($scope.ChatIDD).child("Messages").on("value", function(chatMessage){
-                        $scope.chatMessage = chatMessage.val();
-                        console.log($scope.chatMessage);
-                        chatMessage.forEach(function(Message){
-                          $scope.Message = Message.val();
-                          console.log($scope.Message.Message);
-                          var newLine = document.createElement('p');
+            console.log("Female");
+                $scope.sendMessage = function(){
+                //Save the Messages per username
+                  RoomRef.child($scope.newData.Users.User.username.Username).child("Messages").push({"Messages": $scope.Messages});
+                    
+                   }
+                      RoomRef.child($scope.newData.Users.User.username.Username).child("Messages").limitToLast(1).on("value", function(Chatroom){
+                      $scope.Chatroom = Chatroom.val();
+                      console.log($scope.Chatroom);
+                      Chatroom.forEach(function(Message){
+                       $scope.Message = Message.val();
+                       console.log("Message send :" + $scope.Messages);
+                       var newLine = document.createElement('p');
                        newLine.textContent = $scope.newData.Users.User.username.Username + ": " + $scope.Message.Messages;
-                       document.getElementById("chatdiv").appendChild(newLine);                        
-                        });
+                       document.getElementById("chatdiv").appendChild(newLine);  
                       });
                     });
-                  });
-                })
-            });
+
           }         
         });
       }
