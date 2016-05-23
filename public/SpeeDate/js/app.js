@@ -518,16 +518,3 @@ $(document).ready(function(){
     maximumAge: 80
   });
 });
-
-
-
-     //  for (var key in $scope.newData.Questions.Questions) {
-     //  if ($scope.newData.Questions.Questions.hasOwnProperty(key)) {
-     //   console.log(key + " -> " + JSON.stringify($scope.newData.Questions.Questions[key]));
-     //   if ((JSON.stringify($scope.newData.Questions.Questions.Question1.Workout)) == "Yes") {
-     //    console.log('lol');
-     //   }
-     //   }
-     // }
-
-
