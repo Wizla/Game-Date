@@ -21,7 +21,7 @@ myApp.controller("RegisterCtrl", ["$scope",
       var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/");
       var authData = myFirebaseRef.getAuth();
       if ($scope.password == $scope.cpassword) {      
-      //Firebase SDK methode for creation users, 2 scope objects --> binding with the register.html model.
+      //methode for creation users, 2 scope objects --> binding with the register.html model.
       myFirebaseRef.createUser({
           email: $scope.email,
           password: $scope.password
@@ -124,7 +124,7 @@ myApp.controller("RegisterCtrl", ["$scope",
   function($scope,$window) {
     //here we reference to the profile in the root tree
    var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");
-          //we check if oure user is authenticated with the client
+   var firebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com");
    var authData = myFirebaseRef.getAuth();
     $scope.Choices = [
     {Sex : "Female"},
@@ -161,9 +161,21 @@ myApp.controller("RegisterCtrl", ["$scope",
                                               })
     console.log($scope.SelectedSex.Sex);
     console.log($scope.LookingFor.Sex);
+    
+    if($scope.LookingFor.Sex == "Female"){
+        firebaseRef.child("LookingFor").child('Female').child(authData.uid).set({"Info" : {"Username" : $scope.username,
+                                                                                          "Sex" : $scope.SelectedSex.Sex,
+                                                                                          "UserID" : authData.uid}})
+    }
+    if ($scope.LookingFor.Sex == "Male") {
+      firebaseRef.child("LookingFor").child('Female').child(authData.uid).set({"Info" : {"Username" : $scope.username,
+                                                                                          "Sex" : $scope.SelectedSex.Sex,
+                                                                                          "UserID" : authData.uid}})
+    }
   }
 
 $scope.questionAdd = function(){
+// Progressbar attempt 
 //   setValue = 0;
 //   if(document.getElementById('optionRadio1').checked) {
 //     setValue += 8.34;
@@ -189,6 +201,7 @@ $scope.questionAdd = function(){
 //     }, 500);
   
 // });
+
   console.log($scope.radioValue1);
   console.log($scope.radioValue2);
   console.log($scope.radioValue3);
@@ -234,24 +247,6 @@ $scope.radioValue12 = "";
   
  }]);
 
- //myApp.controller("QuestionCtrl",
-  //function($scope){
-    // var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");
-          //we check if oure user is authenticated with the client
-       //   var authData = myFirebaseRef.getAuth();
-       //   console.log(authData);
-        //Here we use the UID and set is as a child in the data tree, so it's unique for all users.
-    //  var ref = new Firebase("https://burning-inferno-6071.firebaseio.com/profile/" + authData.uid + "/User"); 
-        //We use the on methode to listen for data changes at the profile location
-        //the callback passes us the data in the complete and we palce it in a scope object
-        //we will use this scope object to place the data in the view
-     // ref.on("value", function(Complete) {
-     // var newData = Complete.val();
-     // $scope.newData = newData;
-     // console.log(newData.User);
-  //});
-
-  //});
 
 
  //Controller to retrive the data from the database
@@ -303,33 +298,9 @@ $scope.radioValue12 = "";
        $scope.newData = snapshot.val();
        console.log($scope.newData);
        $scope.$apply();
-       //Queue testing
-       //Work in progress lol
-       console.log($scope.newData.Questions.Questions.Question1.Workout); 
-        // create an instance of a queue
-        // note that the first argument - a callback to be used on each item - is required
-/*        var myQueue = $queue.queue(myCallback, options);
-        //possisble to queue a users uid
-        myQueue.add(authData.uid);
-        var size = myQueue.size();
-        console.log(size); //add one item
-        if (myQueue.size() >= 1) {
-          myQueue.start();
-          console.log("oke?");
-          console.log($scope.items);
-          if ($scope.items == authData.uid) {
-            console.log($scope.newData);          
-            ref.child('Chat').child("room" + profilescore).child("Users").child(authData.uid).child('Username').set({"Username" : { "Username" : $scope.newData.Users.User.username.Username}});
-            console.log("it works ?");
-          }
-           //must call start() if queue starts paused
-        }*/
-        //myQueue.addEach(['item 2', 'item 3']); //add multiple items
 
-        //myQueue.start(); //must call start() if queue starts paused
-        //placing people with same score in the queue
-        //check if there are 2 peeps in it, first one creates private room, second joins the room. Delete them from the queue
-    //ref.child('Chat').child("room" + profilescore).child("Users").child(authData.uid).set($scope.newData.Users.User.username.Username);
+       console.log($scope.newData.Questions.Questions.Question1.Workout); 
+
     roomChatSetup(authData);
     initChat(authData);
        }, function(error) {
@@ -337,244 +308,161 @@ $scope.radioValue12 = "";
         console.error(error);
       });
 
-      // $scope.newData = Complete.val();
-      // console.log(Complete);
-      // console.log($scope.newData.Users.User.username)
-      // console.log(1 + $scope.count++);
-
-      // Provide a context to override "this" when callbacks are triggered.
-// ref.once('value', function (dataSnapshot) {
-//   // this.x is 1
-//   console.log(dataSnapshot);
-// }, 
-// {x: 1});
-
-      //$scope.what = newData;
-      //console.log($scope.what);
-
       $scope.logout = function(){
-        var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");
+        var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com");
         myFirebaseRef.unauth();
         $window.location.href = 'index.html';
       }
   }]);
+    //MAtching and chatting controller
+     myApp.controller("MatchCtrl", function($scope,$window,$element,$attrs){
+      //Firebase Referene
+      var firebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com");
+      //Authenticating the user
+      var authData = firebaseRef.getAuth();
 
-  myApp.controller("MatchCtrl", function($scope,$window){
-    var profilescore = 0;
-    var MyFirebase = new Firebase("https://burning-inferno-6071.firebaseio.com/");
-    var authData = MyFirebase.getAuth();
-        function roomChatSetup(authData) {
-        var chat = new Firechat(MyFirebase);
-        chat.setUser(authData.uid, $scope.newData.Users.User.username.Username, function(user) {
-          console.log("Creating chatroom...");
-          chat.createRoom("New Chatroom Name", "private", function(roomId) {
-            console.log("Created room "+ roomId);
-          });
-       //$("#firechat").html("<div class='alert alert-success'>Your chatroom has been set up. Refresh to view</div>");
-       });
-     }
-
-        function initChat(authData) {
-        var chatUI = new FirechatUI(MyFirebase, document.getElementById('firechat'));
-        chatUI.setUser(authData.uid, $scope.newData.Users.User.username.Username);
-    }
-
-
-    function getroomID(){
-      MyFirebase.child('users').on("value", function(roomnr){
-        roomnr.forEach(function(roomid){
-          roomid.forEach(function(roomy){
-            roomy.forEach(function(room){
-              $scope.room = room.val();
-              //console.log($scope.room.id);
-              var room = JSON.stringify($scope.room.id)
-              console.log(room);
-              var chat = new Firechat(MyFirebase);
-      chat.enterRoom(room);
-      console.log('joining room...')
-
-            })
-          })
-        })
-      })
-    }
-
-        $scope.logout = function(){
-        var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");
-        myFirebaseRef.unauth();
-        $window.location.href = 'index.html';
+      //Function for RooomID
+      function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
       }
+      function generateGUID(){
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+      }
+      $scope.RoomID = generateGUID();
+      //check if user is connecte
+      if (authData) {
+        //Firebase reference
+         var Matchref = firebaseRef.child('LookingFor');
+         //getting user authenticated user data 
+         firebaseRef.child('profile').child(authData.uid).on("value", function(snapshot){
+         $scope.newData = snapshot.val();
+          var RoomRef = firebaseRef.child("Chatroom").child($scope.RoomID);              
+          console.log($scope.newData);
+          console.log("Looking for : " + $scope.newData.Users.User.LookingFor.LookingFor);
+          //Looking for female 
+          if ($scope.newData.Users.User.LookingFor.LookingFor == "Female") {
+            //Retrieving last member added to lookingfor male section
+            Matchref.child("Male").limitToLast(1).on("value", function(snapdata){
+              snapdata.forEach(function(uid){
+                $scope.uid = uid.val();
+                //The user ID of the matched user
+                console.log($scope.uid.Info.UserID);
+                //retrieving data matched user
+                firebaseRef.child("profile").child($scope.uid.Info.UserID).on("value", function(data){
+                  //data is the matching user
+                  //console.log($scope.newData); 
+                  $scope.data = data.val();
+                    //Make Chatroom adding 2 matched users in the room
+                    RoomRef.set({"Users" : { 
+                                              "User1" : $scope.data.Users.User.username.Username,
+                                              "User2" : $scope.newData.Users.User.username.Username}})
 
-
-
-    if (authData) {
-      console.log("Successfully authenticated");
-      console.log(authData);
-       var profileref = MyFirebase.child("profile").child(authData.uid);
-       var Matchref = MyFirebase.child('LookingFor');
-       profileref.on("value",function(snapshot) {
-        console.log(snapshot);
-       $scope.newData = snapshot.val();
-       if ($scope.newData.Users.User.LookingFor.LookingFor == "Female") {
-        console.log($scope.newData.Users.User.username.Username);
-        MyFirebase.child('LookingFor').child('Female').push({"Info" : {"Username" : $scope.newData.Users.User.username.Username,
+                    $scope.sendMessage = function(){
+                      //Save the Messages per username
+                      RoomRef.child($scope.newData.Users.User.username.Username).child("Messages").push({"Messages": $scope.Messages});
+                    
+                   }
+                    //Retrieving messages from the database
+                    RoomRef.child("Messages").limitToLast(1).on('value', function(chatMessage){
+                    $scope.chatMessage = chatMessage.val();
+                    chatMessage.forEach(function(Message){
+                       $scope.Message = Message.val();
+                       console.log($scope.Message);
+                       //Message to view
+                       var newLine = document.createElement('p');
+                       newLine.textContent = $scope.newData.Users.User.username.Username + ": " + $scope.Message.Messages;
+                       document.getElementById("chatdiv").appendChild(newLine);
+                    });
+                   });             
+                });
+              });
+            });
+          }
+          else
+            //Do something whenere are are no males in the lookingfor section
+          if ($scope.newData.Users.User.LookingFor.LookingFor == "Male") {
+            Matchref.child('Male').child(authData.uid).set({"Info" : {"Username" : $scope.newData.Users.User.username.Username,
                                                                                           "Sex" : $scope.newData.Users.User.Sex.Sex,
-                                                                                           "UserID" : authData.uid}});
-       Matchref.child('Male').limitToFirst(1).on("value", function(MatchData){
-       MatchData.forEach(function(Snappyshot){
-        $scope.key = Snappyshot.val();
-        console.log($scope.key.Info.UserID);
-
-           MyFirebase.child("profile").child($scope.key.Info.UserID).on("value", function(SnappyData){
-          $scope.MatchUserData = SnappyData.val();
-          console.log($scope.MatchUserData.Questions.Questions.Question1.Workout);
-          console.log($scope.newData.Questions.Questions.Question1.Workout);
-          //not really proud off the if block here.. But atm no idea how i should do this in a better way.. Leaving it like this for now.
-        if($scope.newData.Questions.Questions.Question1.Workout == $scope.MatchUserData.Questions.Questions.Question1.Workout){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-       if($scope.newData.Questions.Questions.Question2.Music == $scope.MatchUserData.Questions.Questions.Question2.Music){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question3.Festival == $scope.MatchUserData.Questions.Questions.Question3.Festival){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question4.Animals == $scope.MatchUserData.Questions.Questions.Question4.Animals){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question5.Adventures == $scope.MatchUserData.Questions.Questions.Question5.Adventures){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question6.Experiment == $scope.MatchUserData.Questions.Questions.Question6.Experiment){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question7.Cultural == $scope.MatchUserData.Questions.Questions.Question7.Cultural){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question8.Travel == $scope.MatchUserData.Questions.Questions.Question8.Travel){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question9.Films == $scope.MatchUserData.Questions.Questions.Question9.Films){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-         if($scope.newData.Questions.Questions.Question10.Series == $scope.MatchUserData.Questions.Questions.Question10.Series){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question11.Games == $scope.MatchUserData.Questions.Questions.Question11.Games){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question12.Books == $scope.MatchUserData.Questions.Questions.Question12.Books){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-
-       if (profilescore == 12) {
-         roomChatSetup(authData);
-         initChat(authData);
-         getroomID();
-
-       }
-
+                                                                                          "UserID" : authData.uid}})
+              Matchref.child("Female").limitToLast(1).on("value", function(snapdata){
+                snapdata.forEach(function(uid){
+                  $scope.uid = uid.val();
+                  console.log($scope.uid.Info.UserID);
+                  firebaseRef.child("Chatroom").on("value", function(ChatID){
+                    //$scope.ChatID = ChatID.key();
+                    //console.log($scope.ChatID);
+                    ChatID.forEach(function(ChatIDD){
+                      $scope.ChatIDD = ChatIDD.key();
+                      console.log($scope.ChatIDD);
+                      firebaseRef.child("Chatroom").child($scope.ChatIDD).child("Messages").on("value", function(chatMessage){
+                        $scope.chatMessage = chatMessage.val();
+                        console.log($scope.chatMessage);
+                        chatMessage.forEach(function(Message){
+                          $scope.Message = Message.val();
+                          console.log($scope.Message.Message);
+                          var newLine = document.createElement('p');
+                       newLine.textContent = $scope.newData.Users.User.username.Username + ": " + $scope.Message.Messages;
+                       document.getElementById("chatdiv").appendChild(newLine);                        
+                        });
+                      });
+                    });
+                  });
+                })
+            });
+          }         
         });
-      });
-
-    });
-       }
-
-       if ($scope.newData.Users.User.LookingFor.LookingFor == "Male") {
-        console.log($scope.newData.Users.User.username.Username);
-        MyFirebase.child('LookingFor').child('Male').push({"Info" : {"Username" : $scope.newData.Users.User.username.Username,
-                                                                                        "Sex" : $scope.newData.Users.User.Sex.Sex,
-                                                                                         "UserID" : authData.uid}});
-      Matchref.child('Female').limitToFirst(1).on("value", function(MatchData){
-       MatchData.forEach(function(Snappyshot){
-        $scope.key = Snappyshot.val();
-        console.log($scope.key.Info.UserID);
-
-        MyFirebase.child("profile").child($scope.key.Info.UserID).on("value", function(SnappyData){
-          $scope.MatchUserData = SnappyData.val();
-          console.log($scope.MatchUserData);
-          if($scope.newData.Questions.Questions.Question1.Workout == $scope.MatchUserData.Questions.Questions.Question1.Workout){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-       if($scope.newData.Questions.Questions.Question2.Music == $scope.MatchUserData.Questions.Questions.Question2.Music){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question3.Festival == $scope.MatchUserData.Questions.Questions.Question3.Festival){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question4.Animals == $scope.MatchUserData.Questions.Questions.Question4.Animals){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question5.Adventures == $scope.MatchUserData.Questions.Questions.Question5.Adventures){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question6.Experiment == $scope.MatchUserData.Questions.Questions.Question6.Experiment){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question7.Cultural == $scope.MatchUserData.Questions.Questions.Question7.Cultural){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question8.Travel == $scope.MatchUserData.Questions.Questions.Question8.Travel){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question9.Films == $scope.MatchUserData.Questions.Questions.Question9.Films){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-         if($scope.newData.Questions.Questions.Question10.Series == $scope.MatchUserData.Questions.Questions.Question10.Series){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question11.Games == $scope.MatchUserData.Questions.Questions.Question11.Games){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-        if($scope.newData.Questions.Questions.Question12.Books == $scope.MatchUserData.Questions.Questions.Question12.Books){
-        profilescore += 1;
-        console.log(profilescore);
-       }
-       if (profilescore == 12) {
-        joinRoom(authData);
-        initChat(authData);
-       }
-        });
-      });
-
-       });
-       }
+      }
      });
-    }
+
+//<STRIPE>
+jQuery(function($) {
+  $('#payment-form').submit(function(event) {
+    var $form = $(this);
+
+    // Disable the submit button to prevent repeated clicks
+    $form.find('button').prop('disabled', true);
+
+    Stripe.card.createToken($form, stripeResponseHandler);
+
+    // Prevent the form from submitting with the default action
+    return false;
   });
-myApp.controller("StripeCtrl", function($scope){
-  // Stripe Response Handler
-$scope.stripeCallback = function (code, result) {
-    if (result.error) {
-        window.alert('it failed! error: ' + result.error.message);
-    } else {
-        window.alert('success! token: ' + result.id);
-    }
+});
+function stripeResponseHandler(status, response) {
+  var $form = $('#payment-form');
+
+  if (response.error) {
+    // Show the errors on the form
+    $form.find('.payment-errors').text(response.error.message);
+    $form.find('button').prop('disabled', false);
+  } else {
+    // response contains id and card, which contains additional card details
+    var token = response.id;
+    // Insert the token into the form so it gets submitted to the server
+    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+    // and submit
+    $form.get(0).submit();
+  }
 };
-  })
+
+jQuery(function($){
+$('#payment-form').submit(function(event) {
+
+    // Grab the form:
+    var $form = $(this);
+
+    // Disable the submit button to prevent repeated clicks:
+    $('#submit').prop('disabled', true);
+
+    // Request a token from Stripe:
+    Stripe.card.createToken($form, stripeResponseHandler);
+
+    // Prevent the form from being submitted:
+    return false;
+  });
+});
+
+//</STRIPE>
 
  		$(function() {
 
