@@ -263,10 +263,9 @@ $scope.radioValue12 = "";
   function($scope,$queue,$window) {
 
         //We check for Auth data from the user, we use this UID  to get the unqie profile information from the specific user
-        var authData = myFirebaseRef.getAuth();
-
         //We add this to oure firebase ref        
-        var ref = new Firebase("https://burning-inferno-6071.firebaseio.com"); 
+        var ref = new Firebase("https://burning-inferno-6071.firebaseio.com");
+        var authData = ref.getAuth(); 
 
        //Reference to stored data from the autehticated user
        var profileref = ref.child("profile").child(authData.uid);
@@ -314,7 +313,7 @@ $scope.radioValue12 = "";
          //getting user authenticated user data 
          firebaseRef.child('profile').child(authData.uid).on("value", function(snapshot){
          $scope.newData = snapshot.val();
-          var RoomRef = firebaseRef.child("Chatroom").child($scope.RoomID);              
+          var RoomRef = firebaseRef.child("Chatroom");              
           console.log($scope.newData);
           console.log("Looking for : " + $scope.newData.Users.User.LookingFor.LookingFor);
           //Looking for female 
@@ -332,29 +331,32 @@ $scope.radioValue12 = "";
                   //console.log($scope.newData); 
                   $scope.data = data.val();
                     //Make Chatroom adding 2 matched users in the room
-                    RoomRef.set({"Users" : { 
+                    RoomRef.child($scope.RoomID).set({"Users" : { 
                                               "User1" : $scope.data.Users.User.username.Username,
                                               "User2" : $scope.newData.Users.User.username.Username}})
 
                     $scope.sendMessage = function(){
                       //Save the Messages per username
-                      RoomRef.child($scope.newData.Users.User.username.Username).child("Messages").push({"Messages": $scope.Messages});
+                      RoomRef.child($scope.RoomID).child("Messages").push({"Info" : {"Message": $scope.Messages, 
+                                                                           "Username": $scope.newData.Users.User.username.Username}});
                     
-                   }                
+                   }
                     //Retrieving messages from the database
                     //Reference to chatroom
                     //checking for new data
-                    RoomRef.child($scope.newData.Users.User.username.Username).child("Messages").limitToLast(1).on("value", function(Chatroom){
-                      $scope.Chatroom = Chatroom.val();
-                      console.log($scope.Chatroom);
-                      Chatroom.forEach(function(Message){
-                       $scope.Message = Message.val();
-                       console.log("Message send :" + $scope.Messages);
+                    RoomRef.child($scope.RoomID).child("Messages").limitToLast(1).on("value", function(Chatroom){
+                    $scope.Chatroom = Chatroom.val();
+                    Chatroom.forEach(function(RoomKey){
+                      $scope.RoomKey = RoomKey.key();
+                      RoomKey.forEach(function(bericht){
+                        $scope.bericht = bericht.val();
+
                        var newLine = document.createElement('p');
-                       newLine.textContent = $scope.newData.Users.User.username.Username + ": " + $scope.Message.Messages;
-                       document.getElementById("chatdiv").appendChild(newLine);  
+                       newLine.textContent = $scope.bericht.Username + ": " + $scope.bericht.Message;
+                       document.getElementById("chatdiv").appendChild(newLine);
                       });
                     });
+                    });                
                 });
               });
             });
@@ -363,24 +365,34 @@ $scope.radioValue12 = "";
             //Do something whenever there are are no males in the lookingfor section
           if ($scope.newData.Users.User.LookingFor.LookingFor == "Male") {
             console.log("Female");
-                $scope.sendMessage = function(){
-                //Save the Messages per username
-                  RoomRef.child($scope.newData.Users.User.username.Username).child("Messages").push({"Messages": $scope.Messages});
-                    
-                   }
-                      RoomRef.child($scope.newData.Users.User.username.Username).child("Messages").limitToLast(1).on("value", function(Chatroom){
-                      $scope.Chatroom = Chatroom.val();
-                      console.log($scope.Chatroom);
-                      Chatroom.forEach(function(Message){
-                       $scope.Message = Message.val();
-                       console.log("Message send :" + $scope.Messages);
-                       var newLine = document.createElement('p');
-                       newLine.textContent = $scope.newData.Users.User.username.Username + ": " + $scope.Message.Messages;
-                       document.getElementById("chatdiv").appendChild(newLine);  
-                      });
-                    });
+            RoomRef.on("value", function(checking){
+              $scope.checking = checking.key();
+              checking.forEach(function(roomnr){
+                $scope.roomnr = roomnr.key();
+                console.log("lol" + $scope.roomnr);
+                  $scope.sendMessage = function(){
+                  //Save the Messages per username
+                  console.log($scope.roomnr);
+                  RoomRef.child($scope.roomnr).child("Messages").push({"Info" : {"Message": $scope.Messages, 
+                                                                           "Username": $scope.newData.Users.User.username.Username}});
 
-          }         
+                   }
+                     RoomRef.child($scope.roomnr).child("Messages").limitToLast(1).once("value", function(Chatroom){
+                      Chatroom.forEach(function(RoomKey){
+                        RoomKey.forEach(function(bericht){
+                          $scope.bericht = bericht.val();
+                          console.log($scope.bericht.Message);
+                          console.log($scope.bericht.Username)
+                       var newLine = document.createElement('p');
+                       newLine.textContent = $scope.bericht.Username + ": " + $scope.bericht.Message;
+                       document.getElementById("chatdiv").appendChild(newLine);
+                          
+                        })
+                      })
+                    });
+              });
+            });
+          }        
         });
       }
      });
