@@ -175,7 +175,7 @@ myApp.controller("RegisterCtrl", ["$scope",
                                                                                           "UserID" : authData.uid}})
     }
     if ($scope.LookingFor.Sex == "Male") {
-      firebaseRef.child("LookingFor").child('Female').child(authData.uid).set({"Info" : {"Username" : $scope.username,
+      firebaseRef.child("LookingFor").child('Male').child(authData.uid).set({"Info" : {"Username" : $scope.username,
                                                                                           "Sex" : $scope.SelectedSex.Sex,
                                                                                           "UserID" : authData.uid}})
     }
@@ -370,12 +370,16 @@ $scope.radioValue12 = "";
               checking.forEach(function(roomnr){
                 $scope.roomnr = roomnr.key();
                 console.log("lol" + $scope.roomnr);
+                RoomRef.child($scope.roomnr).child("Users").on("value", function(namecheck){
+                  $scope.namecheck = namecheck.val();
+                  console.log($scope.namecheck.User1);
+                  //checking if username matches with username in chatroom
+                  if ($scope.namecheck.User1 == $scope.newData.Users.User.username.Username) {
                   $scope.sendMessage = function(){
                   //Save the Messages per username
                   console.log($scope.roomnr);
                   RoomRef.child($scope.roomnr).child("Messages").push({"Info" : {"Message": $scope.Messages, 
                                                                            "Username": $scope.newData.Users.User.username.Username}});
-
                    }
                      RoomRef.child($scope.roomnr).child("Messages").limitToLast(1).once("value", function(Chatroom){
                       Chatroom.forEach(function(RoomKey){
@@ -390,6 +394,8 @@ $scope.radioValue12 = "";
                         })
                       })
                     });
+                   }
+                  });                     
               });
             });
           }        
