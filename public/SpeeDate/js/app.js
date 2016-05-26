@@ -130,7 +130,6 @@ myApp.controller("RegisterCtrl", ["$scope",
    var firebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com");
    //getting auth data from user
    var authData = myFirebaseRef.getAuth();
-    //Dropdown choices 
     $scope.Choices = [
     {Sex : "Female"},
     {Sex : "Male"}
@@ -452,6 +451,9 @@ $('#payment-form').submit(function(event) {
 });
 
 //</STRIPE>
+
+//</STRIPE>
+
 
  		$(function() {
 
