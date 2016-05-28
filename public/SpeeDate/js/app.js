@@ -126,10 +126,10 @@ myApp.controller("RegisterCtrl", ["$scope",
  myApp.controller("ProfileCtrl",["$scope","$window",
   function($scope,$window) {
     //here we reference to profile
-   var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");
-   var firebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com");
+    var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");
+    var firebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com");
    //getting auth data from user
-   var authData = myFirebaseRef.getAuth();
+    var authData = myFirebaseRef.getAuth();
     $scope.Choices = [
     {Sex : "Female"},
     {Sex : "Male"}
@@ -164,6 +164,7 @@ myApp.controller("RegisterCtrl", ["$scope",
                                                     } 
                                                     }                                                
                                               })
+    myFirebaseRef.child(authData.uid).child("Tokens").set({'Amount': 0});
     console.log($scope.SelectedSex.Sex);
     console.log($scope.LookingFor.Sex);
     
@@ -402,58 +403,17 @@ $scope.radioValue12 = "";
       }
      });
 
-//<STRIPE>
-jQuery(function($) {
-  $('#payment-form').submit(function(event) {
-    var $form = $(this);
+    myApp.controller("TokenCtrl", function($scope){
 
-    // Disable the submit button to prevent repeated clicks
-    $form.find('button').prop('disabled', true);
+      var ref = new Firebase("https://burning-inferno-6071.firebaseio.com");
+      var authData = ref.getAuth(); 
+      ref.child("profile").child(authData.uid).child("Tokens").on("value",function(datasnapshot){
+        $scope.Amount = datasnapshot.val();
+        console.log($scope.Amount.Amount);
+        $scope.$apply();
+      })
 
-    Stripe.card.createToken($form, stripeResponseHandler);
-
-    // Prevent the form from submitting with the default action
-    return false;
-  });
-});
-function stripeResponseHandler(status, response) {
-  var $form = $('#payment-form');
-
-  if (response.error) {
-    // Show the errors on the form
-    $form.find('.payment-errors').text(response.error.message);
-    $form.find('button').prop('disabled', false);
-  } else {
-    // response contains id and card, which contains additional card details
-    var token = response.id;
-    // Insert the token into the form so it gets submitted to the server
-    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
-    // and submit
-    $form.get(0).submit();
-  }
-};
-
-jQuery(function($){
-$('#payment-form').submit(function(event) {
-
-    // Grab the form:
-    var $form = $(this);
-
-    // Disable the submit button to prevent repeated clicks:
-    $('#submit').prop('disabled', true);
-
-    // Request a token from Stripe:
-    Stripe.card.createToken($form, stripeResponseHandler);
-
-    // Prevent the form from being submitted:
-    return false;
-  });
-});
-
-//</STRIPE>
-
-//</STRIPE>
-
+    });
 
  		$(function() {
 
@@ -495,48 +455,48 @@ $(function() {
 
 //<STRIPE>
 jQuery(function($) {
-  $('#payment-form').submit(function(event) {
+$('#payment-form').submit(function(event) {
     var $form = $(this);
 
-    // Disable the submit button to prevent repeated clicks
+     //Disable the submit button to prevent repeated clicks
     $form.find('button').prop('disabled', true);
 
     Stripe.card.createToken($form, stripeResponseHandler);
 
-    // Prevent the form from submitting with the default action
+    //Prevent the form from submitting with the default action
     return false;
   });
 });
 function stripeResponseHandler(status, response) {
-  var $form = $('#payment-form');
+ var $form = $('#payment-form');
 
   if (response.error) {
-    // Show the errors on the form
-    $form.find('.payment-errors').text(response.error.message);
+     //Show the errors on the form
+   $form.find('.payment-errors').text(response.error.message);
     $form.find('button').prop('disabled', false);
-  } else {
-    // response contains id and card, which contains additional card details
+ } else {
+    //response contains id and card, which contains additional card details
     var token = response.id;
     // Insert the token into the form so it gets submitted to the server
-    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
-    // and submit
-    $form.get(0).submit();
-  }
+   $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+     //and submit
+   $form.get(0).submit();
+ }
 };
 
 jQuery(function($){
 $('#payment-form').submit(function(event) {
 
-    // Grab the form:
-    var $form = $(this);
+    //Grab the form:
+   var $form = $(this);
 
-    // Disable the submit button to prevent repeated clicks:
-    $('#submit').prop('disabled', true);
+    //Disable the submit button to prevent repeated clicks:
+   $('#submit').prop('disabled', true);
 
-    // Request a token from Stripe:
+     //Request a token from Stripe:
     Stripe.card.createToken($form, stripeResponseHandler);
 
-    // Prevent the form from being submitted:
+    //Prevent the form from being submitted:
     return false;
   });
 });

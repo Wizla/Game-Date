@@ -1,4 +1,4 @@
-<html>
+<html ng-app="myApp">
 	<head>
 
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -31,7 +31,7 @@
 </script>
 	</head>
 
-	<body ng-app="myApp">
+	<body ng-controller="ProfileCtrl">
 	<nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -61,8 +61,12 @@
       </ul>
     </div>
   </div>
-</nav>	
-	<form action="" method="POST" id="payment-form">
+</nav>
+
+<div ng-controller="TokenCtrl">
+Your current amount of Tokens: {{Amount.Amount}}
+</div>	
+<!--	<form action="" method="POST" id="payment-form">
   <span class="payment-errors"></span>
 
   <div class="form-row">
@@ -93,5 +97,50 @@
 
   <button type="submit" ng-submit="submit()">Submit Payment</button>
 </form>
+-->
+<div ng-controller="TokenCtrl">
+<form action="stripe.html" method="POST">
+  <script
+    src="https://checkout.stripe.com/checkout.js"
+    class="stripe-button"
+    data-key="pk_test_QRJmghJCx22flzaqIRAHgYdp"
+    data-image="/Speedate_logo_square.jpg"
+    data-name="SpeeDate"
+    data-description="100 tokens"
+    data-amount="499"
+    data-currency="EUR"
+    data-label="Buy 100 Tokens">
+  </script>
+</form>
+
+<form action="match.html" method="POST">
+  <script
+    src="https://checkout.stripe.com/checkout.js"
+    class="stripe-button"
+    data-key="pk_test_QRJmghJCx22flzaqIRAHgYdp"
+    data-image="/Speedate_logo_square.jpg"
+    data-name="SpeeDate"
+    data-description="500 tokens"
+    data-amount="1999"
+    data-currency="EUR"
+    data-label="Buy 500 Tokens">
+  </script>
+</form>
+
+<form action="match.html" method="POST">
+  <script
+    src="https://checkout.stripe.com/checkout.js"
+    class="stripe-button"
+    data-key="pk_test_QRJmghJCx22flzaqIRAHgYdp"
+    data-image="/Speedate_logo_square.jpg"
+    data-name="SpeeDate"
+    data-description="500 tokens"
+    data-amount="3499"
+    data-currency="EUR"
+    data-label="Buy 1000 Tokens">
+  </script>
+</form>
+</div>
+
 
 	</body>
