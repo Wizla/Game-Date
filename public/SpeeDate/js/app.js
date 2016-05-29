@@ -4,9 +4,31 @@ var myApp = angular.module('myApp', ["firebase","ngQueue"]);
 
 myApp.controller("quoteCtrl", function($scope, $http){
   $scope.run = function(){
-    $http.get('localhost:3000/quote/random').then(function(response){
+    $http.get('http://localhost:3000/quote/random').then(function(response){
             $scope.myQuote = response.data;
         });
+  }
+
+    $scope.addQuote = function () {
+        var dataObj = {
+          author : $scope.author,
+          text   : $scope.quote
+       };
+
+        var res = $http.post('http://localhost:3000/quote/', dataObj);
+
+        res.success(function(data, status, headers, config) {
+          $scope.message = data;
+        });
+
+        res.error(function(data, status, headers, config) {
+          alert( "failure message: " + JSON.stringify({data: data}));
+        });
+    }
+
+
+ $scope.delete = function(){
+    $http.delete('http://localhost:3000')
   }
 });
 

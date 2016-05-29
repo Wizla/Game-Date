@@ -112,11 +112,13 @@ http://www.w3schools.com/bootstrap/bootstrap_buttons.asp-->
 					<div class="panel-body" ng-controller="quoteCtrl">
 						<div class="row">
 							<div class="col-lg-12">
-								<label>{{myQuote}}</label>								
+								<label>Author: {{myQuote.author}}</label><br>
+								<label>Quote: {{myQuote.text}}</label>							
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-lg-12">
+								<button ng-click="run()">Show</button>
 								<button>Delete this quote!</button>								
 							</div>
 						</div>	
@@ -127,7 +129,7 @@ http://www.w3schools.com/bootstrap/bootstrap_buttons.asp-->
 						</div>
 						<div class="row">
 							<div class="col-lg-12">
-								<button>Add this new quote!</button>
+								<button ng-click="addQuote()">Add this new quote!</button>
 							</div>
 						</div>
 					</div>
