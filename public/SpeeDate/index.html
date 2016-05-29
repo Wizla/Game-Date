@@ -118,18 +118,23 @@ http://www.w3schools.com/bootstrap/bootstrap_buttons.asp-->
 						</div>
 						<div class="row">
 							<div class="col-lg-12">
-								<button ng-click="run()">Show</button>
-								<button>Delete this quote!</button>								
+								<button ng-click="run()">Show</button>							
 							</div>
 						</div>	
 						<div class="row">
 							<div class="col-lg-12">
-								<input type="author" name="author"  placeholder="Author"><input type="quote" name="quote" placeholder="Quote">
+								<input type="author" name="author" ng-model="author" placeholder="Author"><input ng-model="text" type="quote" name="quote" placeholder="Quote">
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-lg-12">
 								<button ng-click="addQuote()">Add this new quote!</button>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12">
+								<input placeholder="number" ng-model="id">
+								<button ng-click="deleteQuote()">Delete this quote!</button>								
 							</div>
 						</div>
 					</div>
