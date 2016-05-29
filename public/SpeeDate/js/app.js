@@ -2,13 +2,6 @@
 //Module for weppAPP 
 var myApp = angular.module('myApp', ["firebase","ngQueue"]);
 
-//myApp.factory("Auth", ["$firebaseAuth",
-	//function($firebaseAuth) {
-		//var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/");
-		//console.log("check");
-		//return $firebaseAuth(myFirebaseRef);		
-	//}
-	//]);
 
 //First controller for registering accounts..
 //$scope Dependency injected, for use of 2 way binding.
@@ -129,7 +122,12 @@ myApp.controller("RegisterCtrl", ["$scope",
     var myFirebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com/profile");
     var firebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com");
    //getting auth data from user
+
     var authData = myFirebaseRef.getAuth();
+
+   var authData = myFirebaseRef.getAuth();
+    //Dropdown choices 
+
     $scope.Choices = [
     {Sex : "Female"},
     {Sex : "Male"}
@@ -164,51 +162,15 @@ myApp.controller("RegisterCtrl", ["$scope",
                                                     } 
                                                     }                                                
                                               })
+
     myFirebaseRef.child(authData.uid).child("Tokens").set({'Amount': 0});
+
     console.log($scope.SelectedSex.Sex);
     console.log($scope.LookingFor.Sex);
     
-    //Adding the preference to the database
-    if($scope.LookingFor.Sex == "Female"){
-        firebaseRef.child("LookingFor").child('Female').child(authData.uid).set({"Info" : {"Username" : $scope.username,
-                                                                                          "Sex" : $scope.SelectedSex.Sex,
-                                                                                          "UserID" : authData.uid}})
-    }
-    if ($scope.LookingFor.Sex == "Male") {
-      firebaseRef.child("LookingFor").child('Male').child(authData.uid).set({"Info" : {"Username" : $scope.username,
-                                                                                          "Sex" : $scope.SelectedSex.Sex,
-                                                                                          "UserID" : authData.uid}})
-    }
   }
 
 $scope.questionAdd = function(){
-// Progressbar attempt 
-//   setValue = 0;
-//   if(document.getElementById('optionRadio1').checked) {
-//     setValue += 8.34;
-//     console.log("oke?");
-// }
-
-//  $('.progress-bar').each(function() {
-//     var $bar = $(this);
-//     var progress = setInterval(function() {
-      
-//       var currWidth = parseInt($bar.attr('aria-valuenow'));
-//       var maxWidth = parseInt($bar.attr('aria-valuemax'));
-//     //update the progress
-//         $bar.width(currWidth+'%');
-//         $bar.attr('aria-valuenow',currWidth+setValue);
-//          console.log(currWidth + setValue);
-//       //clear timer when max is reach
-//       if (currWidth < (maxWidth) ){
-//         clearInterval(progress);
-//       }
-//       else if(currWidth >= 100)
-//         clearInterval(progress);         
-//     }, 500);
-  
-// });
-
   //Radiobutton value's 
   console.log($scope.radioValue1);
   console.log($scope.radioValue2);
@@ -239,6 +201,7 @@ $scope.questionAdd = function(){
                                                         "Question12" : {"Books" : $scope.radioValue12}                                                                                                                          }
   })
 }
+
 $scope.radioValue1 = "";
 $scope.radioValue2 = "";
 $scope.radioValue3 = "";
@@ -256,6 +219,19 @@ $scope.radioValue12 = "";
   
  }]);
 
+
+
+    // //Adding the preference to the database
+    // if($scope.LookingFor.Sex == "Female"){
+    //     firebaseRef.child("LookingFor").child('Female').child(authData.uid).set({"Info" : {"Username" : $scope.username,
+    //                                                                                       "Sex" : $scope.SelectedSex.Sex,
+    //                                                                                       "UserID" : authData.uid}})
+    // }
+    // if ($scope.LookingFor.Sex == "Male") {
+    //   firebaseRef.child("LookingFor").child('Male').child(authData.uid).set({"Info" : {"Username" : $scope.username,
+    //                                                                                       "Sex" : $scope.SelectedSex.Sex,
+    //                                                                                       "UserID" : authData.uid}})
+    // }
 
 
  //Controller to retrive the data from the database
@@ -292,7 +268,7 @@ $scope.radioValue12 = "";
       }
   }]);
     //MAtching and chatting controller
-     myApp.controller("MatchCtrl", function($scope,$window,$element,$attrs){
+     myApp.controller("MatchCtrl", function($scope,$window,$element,$attrs,$window){
       //Firebase Referene
       var firebaseRef = new Firebase("https://burning-inferno-6071.firebaseio.com");
       //Authenticating the user
@@ -318,6 +294,10 @@ $scope.radioValue12 = "";
           console.log("Looking for : " + $scope.newData.Users.User.LookingFor.LookingFor);
           //Looking for female 
           if ($scope.newData.Users.User.LookingFor.LookingFor == "Female") {
+          //Adding preference to lookingfor list
+          firebaseRef.child("LookingFor").child('Female').child(authData.uid).set({"Info" : {"Username" : $scope.newData.Users.User.username.Username,
+                                                                                             "Sex" : $scope.newData.Users.User.Sex.Sex,
+                                                                                             "UserID" : authData.uid}})
             //Retrieving last member added to lookingfor male section
             console.log("Male");
             Matchref.child("Male").limitToLast(1).on("value", function(snapdata){
@@ -330,6 +310,7 @@ $scope.radioValue12 = "";
                   //data is the matching user
                   //console.log($scope.newData); 
                   $scope.data = data.val();
+                  console.log($scope.data);
                     //Make Chatroom adding 2 matched users in the room
                     RoomRef.child($scope.RoomID).set({"Users" : { 
                                               "User1" : $scope.data.Users.User.username.Username,
@@ -340,6 +321,13 @@ $scope.radioValue12 = "";
                       RoomRef.child($scope.RoomID).child("Messages").push({"Info" : {"Message": $scope.Messages, 
                                                                            "Username": $scope.newData.Users.User.username.Username}});
                     
+                   }
+
+                   $scope.leaveChat = function(){
+                    $window.location.href = 'home.html'
+                    RoomRef.child($scope.RoomID).onDisconnect().remove();
+                    firebaseRef.child("LookingFor").child("Female").child(authData.uid).onDisconnect().remove();
+                    firebaseRef.child("LookingFor").child("Male").child($scope.uid.Info.UserID).onDisconnect().remove();
                    }
                     //Retrieving messages from the database
                     //Reference to chatroom
@@ -361,9 +349,12 @@ $scope.radioValue12 = "";
               });
             });
           }
-          else
-            //Do something whenever there are are no males in the lookingfor section
+          console.log()
           if ($scope.newData.Users.User.LookingFor.LookingFor == "Male") {
+            //Adding preference to looking for group
+            firebaseRef.child("LookingFor").child('Male').child(authData.uid).set({"Info" : {"Username" : $scope.newData.Users.User.username.Username,
+                                                                                             "Sex" : $scope.newData.Users.User.Sex.Sex,
+                                                                                             "UserID" : authData.uid}})
             console.log("Female");
             RoomRef.on("value", function(checking){
               $scope.checking = checking.key();
@@ -381,6 +372,12 @@ $scope.radioValue12 = "";
                   RoomRef.child($scope.roomnr).child("Messages").push({"Info" : {"Message": $scope.Messages, 
                                                                            "Username": $scope.newData.Users.User.username.Username}});
                    }
+                    $scope.leaveChat = function(){
+                    $window.location.href = 'home.html'
+                    firebaseRef.child("LookingFor").child("Female").child(authData.uid).onDisconnect().remove();
+                    firebaseRef.child("LookingFor").child("Male").child(authData.uid).onDisconnect().remove(); 
+                    RoomRef.child($scope.roomnr).onDisconnect().remove();
+                   }
                      RoomRef.child($scope.roomnr).child("Messages").limitToLast(1).once("value", function(Chatroom){
                       Chatroom.forEach(function(RoomKey){
                         RoomKey.forEach(function(bericht){
@@ -395,6 +392,13 @@ $scope.radioValue12 = "";
                       })
                     });
                    }
+                  else {
+                    //When there is no male to match with
+                    console.log("here");
+                    document.getElementById('chatbox').style.display = 'none';
+                    document.getElementById('nomatch').style.display = 'block';
+
+                    }
                   });                     
               });
             });
@@ -405,6 +409,7 @@ $scope.radioValue12 = "";
 
     myApp.controller("TokenCtrl", function($scope){
 
+
       var ref = new Firebase("https://burning-inferno-6071.firebaseio.com");
       var authData = ref.getAuth(); 
       ref.child("profile").child(authData.uid).child("Tokens").on("value",function(datasnapshot){
@@ -414,6 +419,50 @@ $scope.radioValue12 = "";
       })
 
     });
+    
+//     Stripe.card.createToken($form, stripeResponseHandler);
+
+//     // Prevent the form from submitting with the default action
+//     return false;
+//   });
+// });
+
+// function stripeResponseHandler(status, response) {
+//   var $form = $('#payment-form');
+
+//   if (response.error) {
+//     // Show the errors on the form
+//     $form.find('.payment-errors').text(response.error.message);
+//     $form.find('button').prop('disabled', false);
+//   } else {
+//     // response contains id and card, which contains additional card details
+//     var token = response.id;
+//     // Insert the token into the form so it gets submitted to the server
+//     $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+//     // and submit
+//     $form.get(0).submit();
+//   }
+// };
+
+// jQuery(function($){
+// $('#payment-form').submit(function(event) {
+
+//     // Grab the form:
+//     var $form = $(this);
+
+//     // Disable the submit button to prevent repeated clicks:
+//     $('#submit').prop('disabled', true);
+
+//     // Request a token from Stripe:
+//     Stripe.card.createToken($form, stripeResponseHandler);
+
+//     // Prevent the form from being submitted:
+//     return false;
+//   });
+// });
+
+// //</STRIPE>
+// >>>>>>> Stashed changes
 
  		$(function() {
 
@@ -452,6 +501,7 @@ $(function() {
   });
 
 });
+
 
 //<STRIPE>
 jQuery(function($) {
