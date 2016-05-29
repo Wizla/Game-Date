@@ -40,6 +40,7 @@ function submitForm(req,res){
     res.json({formSubmit:false,errors:recaptcha.translateErrors(errorCodes)});// translate error codes to human readable text
   });
 }
+
 // Quotes of the day!
 var quotes = [
   { author : 'Mae West', text : "You only live once, but if you do it right, once is enough."},

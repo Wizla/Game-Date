@@ -3,7 +3,11 @@
 var myApp = angular.module('myApp', ["firebase","ngQueue"]);
 
 myApp.controller("quoteCtrl", function($scope, $http){
-
+  $scope.run = function(){
+    $http.get('localhost:3000/quote/random').then(function(response){
+            $scope.myQuote = response.data;
+        });
+  }
 });
 
 //First controller for registering accounts..
