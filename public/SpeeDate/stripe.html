@@ -65,6 +65,7 @@
 <div ng-controller="TokenCtrl">
 Your current amount of Tokens: {{Amount.Amount}}
 </div>
+<!--  
 <form action="" method="POST" id="payment-form">
   <span class="payment-errors"></span>
 
@@ -75,7 +76,7 @@ Your current amount of Tokens: {{Amount.Amount}}
     </label>
   </div>
 
-  <div class="form-row">
+<div class="form-row">
     <label>
       <span>Expiration (MM/YY)</span>
       <input type="text" size="2" data-stripe="exp_month">
@@ -100,9 +101,8 @@ Your current amount of Tokens: {{Amount.Amount}}
 
   <input type="submit" class="submit" value="Submit Payment">
 </form>
-
-<!-- with checkout-->
-<!--<form action="stripe.html" method="POST">
+-->
+<form action="" method="POST">
   <script
     src="https://checkout.stripe.com/checkout.js"
     class="stripe-button"
@@ -113,7 +113,35 @@ Your current amount of Tokens: {{Amount.Amount}}
     data-amount="499"
     data-currency="EUR"
     data-label="Buy 100 Tokens">
-  </script>-->
+  </script>
+</form>
+
+<form action="" method="POST">
+  <script
+    src="https://checkout.stripe.com/checkout.js"
+    class="stripe-button"
+    data-key="pk_test_QRJmghJCx22flzaqIRAHgYdp"
+    data-image="/Speedate_logo_square.jpg"
+    data-name="SpeeDate"
+    data-description="500 tokens"
+    data-amount="1999"
+    data-currency="EUR"
+    data-label="Buy 500 Tokens">
+  </script>
+  </form>
+  <form action="" method="POST">
+  <script
+    src="https://checkout.stripe.com/checkout.js"
+    class="stripe-button"
+    data-key="pk_test_QRJmghJCx22flzaqIRAHgYdp"
+    data-image="/Speedate_logo_square.jpg"
+    data-name="SpeeDate"
+    data-description="1000 tokens"
+    data-amount="3499"
+    data-currency="EUR"
+    data-label="Buy 1000 Tokens">
+  </script>
+</form>
 </form>
 
 </body>
