@@ -2,6 +2,9 @@
 //Module for weppAPP 
 var myApp = angular.module('myApp', ["firebase","ngQueue"]);
 
+myApp.controller("quoteCtrl", function($scope, $http){
+
+});
 
 //First controller for registering accounts..
 //$scope Dependency injected, for use of 2 way binding.
