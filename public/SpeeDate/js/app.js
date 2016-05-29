@@ -105,9 +105,24 @@ myApp.controller("RegisterCtrl", ["$scope",
             alert("Login Failed!"+error);
             } else {
 
-                    $scope.authData = authData;
-                    console.log(authData.uid)
+                  var ref = new Firebase("https://burning-inferno-6071.firebaseio.com/profile/" + authData.uid); 
+                  ref.once("value", function(Complete) {
+                  var newData = Complete.val();
+                  $scope.authData = authData;
+                  console.log(authData.uid);
+                  var newData = Complete.val();
+                  $scope.newData = newData;
+                  //if there is data 
+                  if(newData != null){
+                    $window.location.href = 'home.html';
+                    console.log("!null");
+                  }
+                  //no data
+                  if(newData == null){
                     $window.location.href = 'infoPage.html';
+                    console.log("null");
+                 }
+              });
             }
           });
         }
@@ -373,6 +388,8 @@ $scope.radioValue12 = "";
                                                                            "Username": $scope.newData.Users.User.username.Username}});
                    }
                     $scope.leaveChat = function(){
+                    RoomRef.child($scope.roomnr).child("Messages").push({"Info" : {"Message": "Left the chat", 
+                                                                           "Username": $scope.newData.Users.User.username.Username}});
                     $window.location.href = 'home.html'
                     firebaseRef.child("LookingFor").child("Female").child(authData.uid).onDisconnect().remove();
                     firebaseRef.child("LookingFor").child("Male").child(authData.uid).onDisconnect().remove(); 
